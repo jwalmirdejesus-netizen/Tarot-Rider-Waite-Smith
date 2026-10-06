@@ -1,6 +1,6 @@
 # Tarot-Rider-Waite-Smith
 
-![Tarot-Rider-Waite-Smith](Screenshot_20261006-200945.jpg)
+![Tarot-Rider-Waite-Smith](ascii-art.png)
 
   Um tarot simples e bonito pra tirar uma carta, fazer uma pergunta ou só passar o olho nas ilustrações clássicas da Pamela Colman Smith (1909). Tudo em português, num único arquivo HTML: é só abrir e usar.
 
