@@ -32,4 +32,4 @@ As imagens são de domínio público e vêm do projeto
  Rider-Waite-Smith © 1909, ilustrado por Pamela Colman Smith.
 
 
-#sc
+#Screenshots
