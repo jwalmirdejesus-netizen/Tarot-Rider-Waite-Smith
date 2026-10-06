@@ -1,0 +1,2439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarot Rider-Waite-Smith — Baralho Completo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Grenze+Gotisch:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-display: 'UnifrakturMaguntia', 'Grenze Gotisch', 'Old English Text MT', Georgia, serif;
+            --font-title: 'UnifrakturMaguntia', 'Grenze Gotisch', 'Old English Text MT', Georgia, serif;
+            --font-text: 'Grenze Gotisch', 'UnifrakturMaguntia', Georgia, serif;
+            --bg: #1d1322;
+            --surface: #2a1a30;
+            --card-bg: #3a2342;
+            --accent: #c19a52;
+            --text: #efe5d3;
+            --text-muted: #b5a5b3;
+            --gold: #dcc387;
+            --reversed: #a8507a;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-text);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 1rem;
+        }
+        header {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-bottom: 1px solid #3d2a45;
+            margin-bottom: 2rem;
+        }
+        header h1 { font-size: 2.2rem; color: var(--accent); margin-bottom: 0.5rem; }
+        header p { color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+        section { max-width: 1200px; margin: 0 auto 3rem; }
+        h2 {
+            font-size: 1.6rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        h3 { font-size: 1.2rem; color: var(--gold); margin: 1.5rem 0 0.75rem; }
+
+        /* ===== Tiragens ===== */
+        #tiragens {
+            background: var(--surface);
+            border-radius: 2px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+        #tiragens > h2 { border: none; padding: 0; text-align: center; margin-bottom: 1.5rem; }
+        .spread-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .spread-tab {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--accent);
+            padding: 0.6rem 1.2rem;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .spread-tab:hover { background: rgba(193, 154, 82, 0.2); }
+        .spread-tab.active { background: var(--accent); color: #1d1322; }
+        .spread-panel { display: none; }
+        .spread-panel.active { display: block; }
+
+        .spread-description {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        /* Toggle invertidas */
+        /* ===== Caixa de Pergunta ===== */
+        .question-box {
+            background: rgba(0,0,0,0.18);
+            border: 1px solid rgba(220,195,135,0.25);
+            border-radius: 2px;
+            padding: 1.5rem;
+            margin: 0 auto 2rem;
+            max-width: 700px;
+            text-align: center;
+        }
+        .question-box label {
+            display: block;
+            font-size: 1.15rem;
+            color: var(--gold);
+            margin-bottom: 0.9rem;
+            font-weight: 600;
+        }
+        .question-input-wrap {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #question-input {
+            width: 100%;
+            background: #150d19;
+            border: 1.5px solid #54395c;
+            border-radius: 2px;
+            padding: 1rem 3rem 1rem 1.2rem;
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        #question-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(220,195,135,0.15);
+            background: #1a1120;
+        }
+        #question-input::placeholder { color: #85708a; }
+        #clear-question {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #clear-question.visible { display: flex; }
+        .theme-chips {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        .chip {
+            background: rgba(220,195,135,0.08);
+            border: 1px solid rgba(220,195,135,0.25);
+            color: var(--gold);
+            padding: 0.45rem 0.9rem;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .chip:hover, .chip.active {
+            background: var(--gold);
+            color: #1d1322;
+        }
+        .question-display {
+            margin-top: 1.2rem;
+            background: rgba(220,195,135,0.12);
+            border: 1px solid rgba(220,195,135,0.2);
+            border-radius: 2px;
+            padding: 0.9rem 1.1rem;
+            color: var(--gold);
+            font-style: normal;
+            font-size: 0.95rem;
+            animation: fadeIn 0.3s ease;
+        }
+        .question-display strong { font-style: normal; color: var(--text); }
+        .context-tag {
+            display: inline-block;
+            background: var(--gold);
+            color: #1d1322;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2px;
+            margin-bottom: 0.4rem;
+        }
+        .interpretation-context {
+            font-size: 0.82rem;
+            color: var(--gold);
+            margin-bottom: 0.35rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+        .reading-summary {
+            margin-top: 1.5rem;
+            background: rgba(58,35,66,0.6);
+            border: 1px solid rgba(193,154,82,0.3);
+            border-radius: 2px;
+            padding: 1.2rem;
+            text-align: left;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            display: none;
+        }
+        .reading-summary.visible { display: block; animation: fadeIn 0.4s ease; }
+        .reading-summary h4 { color: var(--accent); margin-bottom: 0.6rem; font-size: 1rem; }
+        .reading-summary p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+        /* ===== Carta do Dia + Streak ===== */
+        #carta-do-dia {
+            background: var(--surface);
+            border: 1.5px solid rgba(220,195,135,0.3);
+            border-radius: 2px;
+            padding: 2rem;
+            margin: 0 auto 3rem;
+            max-width: 850px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+                #carta-do-dia > h2 {
+            border: none;
+            padding: 0;
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+            position: relative;
+        }
+        .daily-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .streak-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        .streak-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(220,195,135,0.2);
+            padding: 0.5rem 0.9rem;
+            border-radius: 2px;
+            font-size: 0.9rem;
+        }
+        .streak-item .icon { font-size: 1.1rem; }
+        .streak-item strong { color: var(--gold); }
+        .streak-item.inactive { opacity: 0.5; }
+
+        .daily-card-stage {
+            min-height: 320px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .daily-placeholder {
+            width: 200px;
+            aspect-ratio: 2 / 3.2;
+            border: 2px dashed rgba(220,195,135,0.4);
+            border-radius: 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            background: rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .daily-placeholder:hover {
+            border-color: var(--gold);
+            background: rgba(220,195,135,0.08);
+        }
+        .daily-placeholder .big { font-size: 3rem; }
+        .daily-placeholder .txt { color: var(--gold); font-size: 0.9rem; font-weight: 600; }
+
+        .daily-revealed {
+            display: flex;
+            gap: 1.8rem;
+            align-items: flex-start;
+            text-align: left;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(220,195,135,0.25);
+            border-radius: 2px;
+            padding: 1.5rem;
+            max-width: 650px;
+            margin: 0 auto;
+            animation: dailyIn 0.6s ease;
+            position: relative;
+        }
+        @keyframes dailyIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .daily-revealed .card-wrap {
+            flex-shrink: 0;
+            width: 180px;
+        }
+        .daily-revealed img {
+            width: 100%;
+            border-radius: 2px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .daily-revealed img.reversed { transform: rotate(180deg); }
+        .daily-text h3 {
+            margin: 0 0 0.4rem 0;
+            font-size: 1.3rem;
+            color: var(--gold);
+        }
+        .daily-tagline {
+            font-size: 1.05rem;
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+        .daily-tagline span {
+            color: var(--accent);
+        }
+        .daily-meaning {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+        .daily-date {
+            font-size: 0.75rem;
+            color: #85708a;
+        }
+
+        .daily-actions {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        .daily-btn {
+            border: none;
+            padding: 0.9rem 1.6rem;
+            border-radius: 2px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .daily-btn.primary {
+            background: var(--gold);
+            color: #1d1322;
+        }
+        .daily-btn.primary:hover { background: var(--accent); }
+        .daily-btn.secondary {
+            background: transparent;
+            border: 1px solid rgba(220,195,135,0.35);
+            color: var(--gold);
+        }
+        .daily-btn.secondary:hover { background: rgba(220,195,135,0.1); }
+        .daily-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ===== Conselho + Ação Prática - NOVO ===== */
+        .conselho-acao-wrap {
+            margin-top: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .conselho-box {
+            background: rgba(220,195,135,0.07);
+            border: 1px solid rgba(220,195,135,0.35);
+            border-radius: 2px;
+            padding: 0.9rem 1rem;
+            text-align: left;
+            animation: fadeIn 0.5s ease;
+        }
+        .conselho-box .ca-label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: 0.35rem;
+        }
+        .conselho-box .ca-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text);
+        }
+        .acao-box {
+            background: rgba(193,154,82,0.09);
+            border: 1px solid rgba(193,154,82,0.4);
+            border-radius: 2px;
+            padding: 0.9rem 1rem;
+            text-align: left;
+            animation: fadeIn 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+                .acao-box .ca-label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 0.35rem;
+        }
+        .acao-box .ca-text {
+            font-size: 0.92rem;
+            line-height: 1.5;
+            color: var(--text);
+            font-weight: 500;
+        }
+        .acao-box .ca-share {
+            margin-top: 0.7rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .ca-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: var(--text);
+            font-size: 0.75rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ca-btn:hover {
+            background: var(--accent);
+            color: #1d1322;
+            border-color: var(--accent);
+        }
+        /* Nas tiragens */
+        .spread-slot .conselho-acao-wrap {
+            width: 100%;
+            margin-top: 0.6rem;
+            gap: 0.5rem;
+        }
+        .spread-slot .conselho-box, .spread-slot .acao-box {
+            padding: 0.6rem 0.75rem;
+            border-radius: 2px;
+        }
+        .spread-slot .conselho-box .ca-text, .spread-slot .acao-box .ca-text {
+            font-size: 0.78rem;
+        }
+        /* No modal */
+        .modal-acao {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+
+        /* ===== Combinações de Cartas - NOVO ===== */
+        .combinacoes-section {
+            max-width: 900px;
+            margin: 2rem auto 1rem;
+            background: rgba(0,0,0,0.18);
+            border: 1.5px solid rgba(155, 100, 160, 0.3);
+            border-radius: 2px;
+            padding: 1.5rem;
+            animation: fadeIn 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+                .combinacoes-section h4 {
+            color: #d3b0d6;
+            font-size: 1.15rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+        .combinacoes-section .comb-subtitle {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+        .comb-grid {
+            display: grid;
+            gap: 0.9rem;
+            position: relative;
+        }
+        .comb-card {
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(155,100,160,0.25);
+            border-radius: 2px;
+            padding: 1rem 1.1rem;
+            transition: all 0.2s;
+        }
+        .comb-card:hover {
+            border-color: rgba(155,100,160,0.5);
+        }
+        .comb-card.especial {
+            background: rgba(220,195,135,0.1);
+            border-color: rgba(220,195,135,0.4);
+        }
+        .comb-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .comb-pair {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255,255,255,0.07);
+            padding: 0.25rem 0.6rem;
+            border-radius: 2px;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+        .comb-pair .plus { color: var(--gold); }
+        .comb-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+        .comb-card.especial .comb-title { color: #e8cf94; }
+        .comb-text {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: var(--text);
+        }
+        .comb-text strong { color: #d3b0d6; }
+        .comb-tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 0.15rem 0.5rem;
+            border-radius: 2px;
+            margin-left: 0.5rem;
+        }
+        .comb-tag.raro { background: var(--gold); color: #1d1322; }
+        .comb-tag.energia { background: rgba(155,100,160,0.3); color: #d3b0d6; border: 1px solid rgba(155,100,160,0.4); }
+        .comb-narrativa {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(220,195,135,0.08);
+            border: 1px dashed rgba(220,195,135,0.3);
+            border-radius: 2px;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            position: relative;
+        }
+        .comb-narrativa strong { color: var(--text); }
+
+        .notify-enabled {
+            background: rgba(107,196,160,0.15) !important;
+            border-color: rgba(107,196,160,0.4) !important;
+            color: #6bc4a0 !important;
+        }
+
+        .reversed-toggle-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+        }
+        .reversed-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(168, 80, 122, 0.15);
+            border: 1px solid rgba(168, 80, 122, 0.5);
+            padding: 0.5rem 1rem;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .reversed-toggle:hover { background: rgba(168, 80, 122, 0.3); }
+        .reversed-toggle input { cursor: pointer; accent-color: var(--reversed); }
+        .reversed-toggle span { color: #e8b8d5; }
+
+        .draw-btn {
+            display: block;
+            margin: 0 auto 1.5rem;
+            background: var(--accent);
+            color: #1d1322;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .draw-btn:hover { background: #a8823f; }
+        
+        .spread-layout {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 1rem;
+            flex-wrap: wrap;
+            min-height: 260px;
+        }
+        .spread-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            width: 180px;
+            max-width: 45vw;
+        }
+        .spread-slot .position-label {
+            font-size: 0.85rem;
+            color: var(--gold);
+            font-weight: 600;
+            text-align: center;
+        }
+        .spread-slot .slot-placeholder {
+            width: 100%;
+            aspect-ratio: 2 / 3.5;
+            border: 2px dashed #54395c;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b5470;
+            font-size: 2rem;
+            background: rgba(0, 0, 0, 0.15);
+        }
+        .spread-slot .card { width: 100%; }
+
+        .celtic-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto auto;
+            gap: 1rem;
+            justify-items: center;
+            align-items: start;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .celtic-layout .spread-slot { width: 170px; }
+
+        /* ===== Cartas ===== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .card {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: 2px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease;
+            cursor: pointer;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .card:hover {
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            aspect-ratio: 2 / 3.5;
+            object-fit: cover;
+            background: #120a16;
+            transition: transform 0.4s ease;
+        }
+        .card.reversed img {
+            transform: rotate(180deg);
+        }
+        .card.reversed {
+            border: 1px solid rgba(168, 80, 122, 0.6);
+            box-shadow: 0 0 12px rgba(168, 80, 122, 0.3);
+        }
+        .card-title {
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            text-align: center;
+            color: var(--text);
+            background: rgba(0, 0, 0, 0.3);
+            margin-top: auto;
+        }
+        /* Badge invertida */
+        .reversed-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: var(--reversed);
+            color: white;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 2px;
+            font-weight: 700;
+            z-index: 2;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        /* ===== Descrição no slot ===== */
+        .spread-slot .card-meaning {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 0.5rem;
+            border-radius: 2px;
+            line-height: 1.4;
+            border: 1px solid rgba(193, 154, 82, 0.3);
+        }
+        .spread-slot .card-meaning.reversed-meaning {
+            border-color: rgba(168, 80, 122, 0.5);
+            background: rgba(168, 80, 122, 0.12);
+        }
+        .spread-slot .card-meaning .meaning-label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: var(--reversed);
+        }
+        .spread-slot .card-meaning .meaning-label.normal-label {
+            color: #6bc4a0;
+        }
+
+        /* ===== Modal ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: var(--surface);
+            border-radius: 2px;
+            max-width: 720px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(193, 154, 82, 0.4);
+            animation: modalIn 0.25s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #3d2a45;
+        }
+        .modal-header h3 { color: var(--gold); margin: 0; font-size: 1.2rem; }
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 0.5rem;
+            transition: color 0.2s;
+        }
+        .modal-close:hover { color: var(--accent); }
+
+        /* Abas Normal/Invertida no modal */
+        .orientation-tabs {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem 0;
+            justify-content: center;
+        }
+        .orientation-tab {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid #54395c;
+            padding: 0.4rem 1rem;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .orientation-tab:hover { border-color: var(--accent); }
+        .orientation-tab.active {
+            background: var(--accent);
+            color: #1d1322;
+            border-color: var(--accent);
+        }
+        .orientation-tab.active[data-orientation="reversed"] {
+            background: var(--reversed);
+            border-color: var(--reversed);
+        }
+
+        .modal-body {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .modal-body img {
+            width: 180px;
+            max-width: 40%;
+            aspect-ratio: 2 / 3.5;
+            object-fit: cover;
+            border-radius: 2px;
+            background: #120a16;
+            flex-shrink: 0;
+            transition: transform 0.4s ease;
+        }
+        .modal-body img.reversed-img {
+            transform: rotate(180deg);
+        }
+        .modal-text { flex: 1; min-width: 200px; }
+        .modal-text .card-suit {
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .modal-text .card-orientation {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.6rem;
+            border-radius: 2px;
+            margin-left: 0.5rem;
+            font-weight: 600;
+        }
+        .card-orientation.normal { background: rgba(107, 196, 160, 0.2); color: #6bc4a0; }
+        .card-orientation.reversed { background: rgba(168, 80, 122, 0.25); color: #e8b8d5; }
+        .modal-text .card-meaning-text {
+            color: var(--text);
+            font-size: 0.98rem;
+            line-height: 1.7;
+            margin-top: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-top: 1px solid #3d2a45;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 500px) {
+            header h1 { font-size: 1.6rem; }
+            .card-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.6rem; }
+            .card-title { font-size: 0.7rem; padding: 0.3rem; }
+            .spread-slot { width: 130px; }
+            .celtic-layout .spread-slot { width: 110px; }
+            .spread-slot .card-meaning { font-size: 0.68rem; padding: 0.35rem; }
+            .modal-body img { width: 120px; }
+            .reversed-badge { font-size: 0.55rem; padding: 0.15rem 0.35rem; }
+        }
+
+        /* ===== Tipografia ===== */
+        body { font-size: 1.05rem; }
+        h1, h2, h3, h4, .daily-text h3, .modal-header h3, .combinacoes-section h4,
+        .reading-summary h4, .comb-title, .question-box label, .daily-tagline {
+            font-family: var(--font-display);
+            font-weight: 600;
+        }
+        header h1 {
+            font-family: var(--font-title);
+            font-weight: 600;
+            font-size: 2.1rem;
+        }
+        h2 { font-size: 2rem; line-height: 1.15; }
+        h3 { font-size: 1.5rem; }
+        .daily-text h3 { font-size: 1.8rem; }
+        .modal-header h3 { font-size: 1.5rem; }
+        .combinacoes-section h4 { font-size: 1.4rem; }
+        .reading-summary h4 { font-size: 1.25rem; }
+        .question-box label { font-size: 1.45rem; font-weight: 600; }
+        .daily-tagline { font-size: 1.3rem; font-weight: 500; font-style: normal; }
+        .comb-title { font-size: 1.1rem; font-weight: 700; }
+        .card-title { font-family: var(--font-display); font-size: 0.95rem; font-weight: 600; }
+        .spread-tab, .chip, .draw-btn, .daily-btn { font-family: inherit;  }
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.4rem; }
+            h2 { font-size: 1.6rem; }
+            .card-title { font-size: 0.8rem; }
+        }
+
+        /* ===== Ícones SVG ===== */
+        .ico { width: 1em; height: 1em; display: inline-block; vertical-align: -0.14em; flex-shrink: 0; }
+        header h1 .orn { color: var(--accent); display: inline-block; }
+        header h1 .orn .ico { width: 0.55em; height: 0.55em; vertical-align: 0.12em; margin: 0 0.35em; }
+        h3 .ico-suit { width: 0.8em; height: 0.8em; margin-right: 0.35em; vertical-align: -0.04em; color: var(--accent); }
+        .streak-item .icon { display: inline-flex; color: var(--accent); }
+        .streak-item .icon .ico { width: 1.15rem; height: 1.15rem; }
+        .daily-placeholder .big .ico-big { width: 3rem; height: 3rem; color: var(--gold); }
+    
+        /* ===== Molduras estilo carta de tarot ===== */
+        :root { --line: rgba(193, 154, 82, 0.55); --line-soft: rgba(193, 154, 82, 0.28); }
+
+        /* títulos de seção: losango + filete */
+        h2 { display: flex; align-items: center; gap: 0.9rem; border: none; padding: 0; }
+        h2::before { content: ''; width: 7px; height: 7px; background: var(--accent); transform: rotate(45deg); flex: none; }
+        h2::after { content: ''; flex: 1; height: 1px; background: var(--line-soft); }
+        #tiragens > h2, #carta-do-dia > h2 { justify-content: center; }
+        #tiragens > h2::before, #carta-do-dia > h2::before { order: 0; }
+        #tiragens > h2::after, #carta-do-dia > h2::after { flex: none; width: 3rem; height: 1px; }
+        header { border-bottom: 1px solid var(--line-soft); }
+
+        /* moldura dupla: filete externo + filete interno recuado */
+        #tiragens, #carta-do-dia, .combinacoes-section, .modal-content, .question-box {
+            border: 1px solid var(--line);
+            box-shadow: inset 0 0 0 5px var(--surface), inset 0 0 0 6px var(--line-soft);
+        }
+        .question-box { box-shadow: inset 0 0 0 4px var(--bg), inset 0 0 0 5px var(--line-soft); }
+        .modal-content { box-shadow: inset 0 0 0 5px var(--surface), inset 0 0 0 6px var(--line-soft), 0 20px 60px rgba(0,0,0,0.7); }
+        #tiragens, #carta-do-dia, .combinacoes-section { padding: 2.2rem; position: relative; overflow: visible; }
+
+        /* losangos nos centros do topo e da base */
+        #tiragens::before, #tiragens::after,
+        #carta-do-dia::before, #carta-do-dia::after,
+        .combinacoes-section::before, .combinacoes-section::after {
+            content: ''; position: absolute; left: 50%; width: 9px; height: 9px;
+            background: var(--accent); border: 1px solid var(--bg);
+            transform: translateX(-50%) rotate(45deg); pointer-events: none;
+        }
+        #tiragens::before, #carta-do-dia::before, .combinacoes-section::before { top: -5px; }
+        #tiragens::after, #carta-do-dia::after, .combinacoes-section::after { bottom: -5px; }
+
+        /* botões e abas: retos, linha fina, caixa-alta discreta */
+        .spread-tab, .chip, .daily-btn, .draw-btn, .orientation-tab, .ca-btn, .reversed-toggle {
+            border-radius: 2px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+        .spread-tab, .chip, .daily-btn.secondary { border: 1px solid var(--line); }
+        .spread-tab { padding: 0.65rem 1.3rem; }
+        .daily-btn.primary, .draw-btn { border: 1px solid var(--accent); }
+        .daily-btn, .draw-btn { padding: 0.85rem 1.8rem; }
+        .spread-tab:hover, .chip:hover, .daily-btn.secondary:hover { background: rgba(193,154,82,0.14); }
+        .spread-tab.active, .chip.active { background: var(--accent); color: #1d1322; border-color: var(--accent); }
+
+        /* campos e caixas internas */
+        #question-input { border-radius: 2px; border: 1px solid var(--line-soft); }
+        .conselho-box, .acao-box, .question-display, .reading-summary, .comb-card { border-radius: 2px; }
+        .question-display { background: rgba(0,0,0,0.2); border: 1px solid var(--line-soft); }
+        .context-tag, .comb-tag { border-radius: 1px; }
+
+        /* cartas: filete fino dourado */
+        .card img, .daily-card-stage img { border-radius: 2px; }
+        .card { border: 1px solid var(--line-soft); transition: border-color 0.2s; }
+        .card:hover { border-color: var(--accent); }
+
+/* ===== Ajuste de hierarquia: assimetria, layout próprio na Carta do Dia, mais respiro ===== */
+body { padding: 1.5rem clamp(1rem, 4vw, 3rem) 0; }
+section { margin-bottom: 7rem; }
+h2 { display: block; }
+h2::before, h2::after,
+#tiragens > h2::before, #tiragens > h2::after,
+#carta-do-dia > h2::before, #carta-do-dia > h2::after { display: none; }
+
+/* Cabeçalho: título à esquerda, texto deslocado à direita */
+header {
+    display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: 1.5rem clamp(2rem, 6vw, 5rem); align-items: end;
+    max-width: 1200px; margin: 0 auto 7rem; padding: 4rem 0 3rem;
+    text-align: left; border-bottom: 1px solid var(--line-soft);
+}
+header h1, header h1 { font-size: clamp(2.6rem, 6.5vw, 4.8rem); line-height: 1; margin: 0; }
+header h1 .orn { display: none; }
+header p { margin: 0; max-width: 34ch; }
+
+/* Carta do Dia: duas colunas, sem moldura; texto e ações à esquerda, carta sobre painel à direita */
+#carta-do-dia {
+    max-width: 1200px; margin: 0 auto 8rem; padding: 0; text-align: left;
+    background: none; border: 0; box-shadow: none; overflow: visible;
+    display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    grid-template-areas: "title stage" "sub stage" "streak stage" "actions stage" "rest stage";
+    grid-template-rows: auto auto auto auto 1fr;
+    column-gap: clamp(2rem, 6vw, 5rem); align-items: start;
+}
+#carta-do-dia::before, #carta-do-dia::after { display: none; }
+#carta-do-dia > h2 { grid-area: title; text-align: left; font-size: clamp(2.6rem, 5vw, 4rem); line-height: 1; margin: 0 0 1.25rem; }
+#carta-do-dia .daily-subtitle { grid-area: sub; max-width: 30ch; margin-bottom: 2.5rem; }
+#carta-do-dia .streak-bar {
+    grid-area: streak; flex-direction: column; align-items: flex-start; justify-content: flex-start;
+    gap: 0.35rem; margin-bottom: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line-soft); align-self: stretch;
+}
+#carta-do-dia .streak-item { background: none; border: 0; padding: 0; }
+#carta-do-dia .daily-actions { grid-area: actions; flex-direction: column; align-items: flex-start; justify-content: flex-start; }
+#carta-do-dia .daily-card-stage {
+    grid-area: stage; background: var(--surface); margin: 0; min-height: 440px;
+    padding: clamp(1.5rem, 4vw, 3.5rem); justify-content: flex-start; align-items: flex-start;
+}
+#carta-do-dia .daily-placeholder { width: clamp(180px, 22vw, 240px); }
+#carta-do-dia .daily-revealed {
+    width: 100%; max-width: none; margin: 0; padding: 0; background: none; border: 0;
+    gap: clamp(1.5rem, 3vw, 3.5rem); flex-wrap: wrap;
+}
+#carta-do-dia .daily-revealed .card-wrap { width: clamp(170px, 22vw, 260px); transform: rotate(-2deg); }
+#carta-do-dia .daily-text { flex: 1; min-width: 240px; max-width: 46ch; padding-top: 2.5rem; }
+#carta-do-dia .daily-text h3 { font-size: clamp(2rem, 3.2vw, 2.6rem); line-height: 1.1; margin-bottom: 1rem; }
+#carta-do-dia .daily-tagline { font-size: 1.5rem; margin-bottom: 1.25rem; }
+#carta-do-dia .daily-meaning { margin-bottom: 1.5rem; }
+#carta-do-dia .conselho-acao-wrap { margin-top: 2rem; gap: 1.5rem; }
+#carta-do-dia .conselho-box { background: none; border: 0; border-left: 2px solid var(--line); border-radius: 0; padding: 0 0 0 1rem; }
+
+/* Tiragens: pergunta em coluna lateral fixa, abas e cartas alinhadas à esquerda */
+#tiragens {
+    background: none; border: 0; box-shadow: none; padding: 0; margin: 0 auto 8rem;
+    display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    grid-template-areas: "title title" "question tabs" "question panels";
+    column-gap: clamp(2rem, 6vw, 5rem); align-items: start;
+}
+#tiragens::before, #tiragens::after { display: none; }
+#tiragens > h2 { grid-area: title; text-align: left; font-size: clamp(2.2rem, 4vw, 3.2rem); margin-bottom: 3.5rem; }
+#tiragens > .question-box {
+    grid-area: question; position: sticky; top: 1.5rem; max-width: none; margin: 0; text-align: left;
+    background: none; box-shadow: none; border: 0; border-left: 2px solid var(--accent); border-radius: 0; padding: 0 0 0 1.5rem;
+}
+#tiragens > .spread-tabs { grid-area: tabs; justify-content: flex-start; margin-bottom: 2.5rem; }
+#tiragens > .spread-panel { grid-area: panels; min-width: 0; }
+.theme-chips { justify-content: flex-start; }
+.spread-description { text-align: left; margin-bottom: 1.5rem; }
+.reversed-toggle-wrap { justify-content: flex-start; margin-bottom: 1.5rem; }
+.draw-btn { margin: 0 0 2.5rem; }
+.spread-layout { justify-content: flex-start; gap: 1.5rem; }
+.celtic-layout { margin: 0; gap: 1.5rem; }
+.reading-summary { margin-left: 0; margin-right: 0; }
+.combinacoes-section {
+    margin: 3.5rem 0 0; background: none; border: 0; box-shadow: none;
+    border-left: 2px solid rgba(155,100,160,0.5); border-radius: 0; padding: 0 0 0 1.5rem;
+}
+.combinacoes-section::before, .combinacoes-section::after { display: none; }
+
+/* Galerias: títulos grandes, o segundo deslocado, grades mais arejadas */
+section:not(#carta-do-dia):not(#tiragens) > h2 { font-size: clamp(2.4rem, 4.5vw, 3.6rem); margin-bottom: 2.5rem; }
+section:last-of-type > h2 { margin-left: clamp(0px, 14vw, 10rem); }
+section:not(#carta-do-dia):not(#tiragens) > h3 { margin: 4rem 0 1.25rem; }
+.card-grid { gap: 1.75rem 1.25rem; }
+
+footer { max-width: 1200px; margin: 0 auto; text-align: left; border-top: 0; padding: 4rem 0 3rem; }
+
+@media (max-width: 860px) {
+    header { grid-template-columns: 1fr; margin-bottom: 4rem; padding-top: 2rem; }
+    section, #carta-do-dia, #tiragens { margin-bottom: 5rem; }
+    #carta-do-dia { grid-template-columns: 1fr; grid-template-areas: "title" "sub" "streak" "stage" "actions"; grid-template-rows: auto; }
+    #carta-do-dia .streak-bar { margin-bottom: 2rem; }
+    #carta-do-dia .daily-card-stage { margin-bottom: 2rem; min-height: 0; }
+    #carta-do-dia .daily-text { padding-top: 0; }
+    #tiragens { grid-template-columns: 1fr; grid-template-areas: "title" "question" "tabs" "panels"; }
+    #tiragens > .question-box { position: static; margin-bottom: 2.5rem; }
+    section:last-of-type > h2 { margin-left: 0; }
+}
+
+/* Modal: imagem não estica com a altura do texto, então não corta as bordas */
+.modal-body { align-items: flex-start; }
+.modal-body img { align-self: flex-start; height: auto; object-fit: contain; }
+</style>
+</head>
+<body>
+
+    <header>
+        <h1><span class="orn"><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg></span> Tarot Rider-Waite-Smith <span class="orn"><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg></span></h1>
+        <p>
+            Baralho completo com as 78 cartas e as ilustrações clássicas de
+            Pamela Colman Smith (1909). Clique em qualquer carta para ver seu significado —
+            ou ative as <strong>cartas invertidas</strong> nas tiragens.
+        </p>
+    </header>
+
+    <!-- ===== CARTA DO DIA + STREAK ===== -->
+    <section id="carta-do-dia">
+        <h2>Sua Carta do Dia</h2>
+        <p class="daily-subtitle">Um conselho do tarot para guiar seu dia. Volte amanhã para manter sua sequência.</p>
+        
+        <div class="streak-bar">
+            <div class="streak-item" id="streak-current">
+                <span class="icon"><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.8 3.6 5 5.6 5 10.6A5 5 0 0 1 7 12.6c0-2 1-3.2 2.2-4.2.1 1.8.9 2.8 1.9 3C10.600 8 11 5.200 12 2z"/></svg></span> <span><strong id="streak-count">0</strong> dias seguidos</span>
+            </div>
+            <div class="streak-item" id="streak-best">
+                <span class="icon"><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.500A8.500 8.500 0 0 1 9.500 4a8.500 8.500 0 1 0 10.500 10.500z"/></svg></span> <span>Recorde: <strong id="best-streak">0</strong></span>
+            </div>
+            <div class="streak-item" id="streak-total">
+                <span class="icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.500" width="14" height="19" rx="1.500"/><path d="M12 8l1.200 3.200L16.500 12l-3.300.8L12 16l-1.200-3.200L7.500 12l3.300-.8z" fill="currentColor" stroke="none"/></svg></span> <span><strong id="total-draws">0</strong> cartas tiradas</span>
+            </div>
+        </div>
+
+        <div class="daily-card-stage" id="daily-stage">
+            <div class="daily-placeholder" id="daily-placeholder">
+                <div class="big"><svg class="ico ico-big" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg></div>
+                <div class="txt">Toque para revelar<br>sua carta de hoje</div>
+            </div>
+            <div class="daily-revealed" id="daily-revealed" style="display:none;">
+                <div class="card-wrap">
+                    <img id="daily-img" src="" alt="">
+                </div>
+                <div class="daily-text">
+                    <h3 id="daily-name"></h3>
+                    <div class="daily-tagline" id="daily-tagline"></div>
+                    <div class="daily-meaning" id="daily-meaning"></div>
+                    <div class="conselho-acao-wrap" id="daily-conselho-acao" style="display:none;">
+                        <div class="conselho-box">
+                            <div class="ca-label">Conselho do Dia</div>
+                            <div class="ca-text" id="daily-conselho"></div>
+                        </div>
+                        <div class="acao-box">
+                            <div class="ca-label">Ação Prática de Hoje</div>
+                            <div class="ca-text" id="daily-acao"></div>
+                            <div class="ca-share">
+                                <button class="ca-btn" onclick="copiarAcao('daily')">Copiar</button>
+                                <button class="ca-btn" onclick="compartilharAcao('daily')">↗ Compartilhar</button>
+                                <button class="ca-btn" onclick="marcarFeito('daily')">Fiz!</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="daily-date" id="daily-date"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="daily-actions">
+            <button class="daily-btn primary" id="daily-draw-btn">Revelar minha carta de hoje</button>
+            <button class="daily-btn secondary" id="daily-notify-btn">Me lembrar todo dia às 8h</button>
+        </div>
+    </section>
+
+    <!-- ===== Tiragens ===== -->
+    <section id="tiragens">
+        <h2>Escolha uma Tiragem</h2>
+
+        <div class="question-box">
+            <label for="question-input">Qual sua pergunta para o tarot?</label>
+            <div class="question-input-wrap">
+                <input id="question-input" type="text" placeholder="Ex: o que ele sente por mim? devo mudar de emprego?" maxlength="120" autocomplete="off">
+                <button id="clear-question" type="button" aria-label="Limpar">×</button>
+            </div>
+            <div class="theme-chips">
+                <button class="chip" data-example="o que ele sente por mim?">Amor</button>
+                <button class="chip" data-example="devo mudar de emprego?">Trabalho</button>
+                <button class="chip" data-example="vou ter dinheiro esse mês?">Dinheiro</button>
+                <button class="chip" data-example="devo fazer essa escolha?">Decisão</button>
+                <button class="chip" data-example="qual energia da minha semana?">Energia</button>
+            </div>
+            <div id="question-display" class="question-display" style="display:none;"></div>
+        </div>
+
+        <div class="spread-tabs" role="tablist">
+            <button class="spread-tab active" data-spread="single" role="tab">1 Carta</button>
+            <button class="spread-tab" data-spread="three" role="tab">3 Cartas</button>
+            <button class="spread-tab" data-spread="five" role="tab">5 Cartas</button>
+        </div>
+
+        <div class="spread-panel active" id="panel-single">
+            <p class="spread-description">Uma carta para uma mensagem direta e objetiva do dia.</p>
+            <div class="reversed-toggle-wrap">
+                <label class="reversed-toggle">
+                    <input type="checkbox" class="reversed-check" data-spread="single">
+                    <span>↻ Permitir cartas invertidas</span>
+                </label>
+            </div>
+            <button class="draw-btn" data-spread="single">Tirar uma Carta</button>
+            <div class="spread-layout" id="layout-single">
+                <div class="spread-slot" data-position="">
+                    <div class="slot-placeholder">?</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="spread-panel" id="panel-three">
+            <p class="spread-description">Passado · Presente · Futuro — compreenda a linha do tempo da sua questão.</p>
+            <div class="reversed-toggle-wrap">
+                <label class="reversed-toggle">
+                    <input type="checkbox" class="reversed-check" data-spread="three">
+                    <span>↻ Permitir cartas invertidas</span>
+                </label>
+            </div>
+            <button class="draw-btn" data-spread="three">Tirar Três Cartas</button>
+            <div class="spread-layout" id="layout-three">
+                <div class="spread-slot" data-position="Passado">
+                    <div class="position-label">Passado</div>
+                    <div class="slot-placeholder">?</div>
+                </div>
+                <div class="spread-slot" data-position="Presente">
+                    <div class="position-label">Presente</div>
+                    <div class="slot-placeholder">?</div>
+                </div>
+                <div class="spread-slot" data-position="Futuro">
+                    <div class="position-label">Futuro</div>
+                    <div class="slot-placeholder">?</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="spread-panel" id="panel-five">
+            <p class="spread-description">Cruz de Cinco Cartas — situação, desafio, ação, resultado e conselho.</p>
+            <div class="reversed-toggle-wrap">
+                <label class="reversed-toggle">
+                    <input type="checkbox" class="reversed-check" data-spread="five">
+                    <span>↻ Permitir cartas invertidas</span>
+                </label>
+            </div>
+            <button class="draw-btn" data-spread="five">Tirar Cinco Cartas</button>
+            <div class="celtic-layout" id="layout-five">
+                <div class="spread-slot" data-position="Situação" style="grid-column: 1; grid-row: 1;">
+                    <div class="position-label">Situação</div>
+                    <div class="slot-placeholder">?</div>
+                </div>
+                <div class="spread-slot" data-position="Desafio" style="grid-column: 3; grid-row: 1;">
+                    <div class="position-label">Desafio</div>
+                    <div class="slot-placeholder">?</div>
+                </div>
+                <div class="spread-slot" data-position="Ação" style="grid-column: 1; grid-row: 2;">
+                    <div class="position-label">Ação</div>
+                    <div class="slot-placeholder">?</div>
+                </div>
+                <div class="spread-slot" data-position="Resultado" style="grid-column: 3; grid-row: 2;">
+                    <div class="position-label">Resultado</div>
+                    <div class="slot-placeholder">?</div>
+                </div>
+                <div class="spread-slot" data-position="Conselho" style="grid-column: 2; grid-row: 2;">
+                    <div class="position-label">Conselho</div>
+                    <div class="slot-placeholder">?</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeria -->
+    <section>
+        <h2>Arcano Maior (22 cartas)</h2>
+        <div class="card-grid" id="major-grid"></div>
+    </section>
+
+    <section>
+        <h2>Arcano Menor (56 cartas)</h2>
+        <h3><svg class="ico ico-suit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20L3 5h18z"/><path d="M6.500 10h11"/></svg> Ouros</h3>
+        <div class="card-grid" id="pents-grid"></div>
+        <h3><svg class="ico ico-suit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20L3 5h18z"/></svg> Copas</h3>
+        <div class="card-grid" id="cups-grid"></div>
+        <h3><svg class="ico ico-suit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4L21 19H3z"/><path d="M6.500 14h11"/></svg> Espadas</h3>
+        <div class="card-grid" id="swords-grid"></div>
+        <h3><svg class="ico ico-suit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4L21 19H3z"/></svg> Paus</h3>
+        <div class="card-grid" id="wands-grid"></div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="card-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Carta</h3>
+                <button class="modal-close" id="modal-close" aria-label="Fechar">×</button>
+            </div>
+            <div class="orientation-tabs">
+                <button class="orientation-tab active" data-orientation="normal">Normal</button>
+                <button class="orientation-tab" data-orientation="reversed">↻ Invertida</button>
+            </div>
+            <div class="modal-body">
+                <img id="modal-img" src="" alt="">
+                <div class="modal-text">
+                    <div class="card-suit" id="modal-suit"></div>
+                    <p class="card-meaning-text" id="modal-meaning"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            Imagens de domínio público, cortesia do projeto
+            <a href="https://github.com/OrionJDev/the-arcana" target="_blank" rel="noopener">The Arcana</a>.
+            Rider-Waite-Smith © 1909, ilustrado por Pamela Colman Smith.
+        </p>
+    </footer>
+
+    <script>
+        const BASE_URL = 'https://raw.githubusercontent.com/OrionJDev/the-arcana/main/cards/';
+
+        const MAJOR_NAMES = [
+            'O Louco', 'O Mago', 'A Sacerdotisa', 'A Imperatriz', 'O Imperador',
+            'O Hierofante', 'Os Amantes', 'O Carro', 'A Força', 'O Eremita',
+            'A Roda da Fortuna', 'A Justiça', 'O Enforcado', 'A Morte',
+            'A Temperança', 'O Diabo', 'A Torre', 'A Estrela', 'A Lua',
+            'O Sol', 'O Julgamento', 'O Mundo'
+        ];
+
+        const MINOR_NAMES = {
+            Pents: ['Ás', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Valete', 'Cavaleiro', 'Rainha', 'Rei'],
+            Cups:  ['Ás', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Valete', 'Cavaleiro', 'Rainha', 'Rei'],
+            Swords:['Ás', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Valete', 'Cavaleiro', 'Rainha', 'Rei'],
+            Wands: ['Ás', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Valete', 'Cavaleiro', 'Rainha', 'Rei']
+        };
+
+        const SUIT_PT = { Pents: 'Ouros', Cups: 'Copas', Swords: 'Espadas', Wands: 'Paus' };
+
+        // ===== SIGNIFICADOS NORMAIS =====
+        const CARD_MEANINGS = {
+            major_00: 'O Louco representa novos começos, inocência e fé no desconhecido. É o salto no abismo antes da jornada — um convite para confiar na vida e abraçar o inesperado sem medo.',
+            major_01: 'O Mago simboliza manifestação, poder pessoal e habilidade. Você tem todos os recursos necessários à disposição para transformar ideias em realidade — basta concentrar a vontade.',
+            major_02: 'A Sacerdotisa fala de intuição, mistério e sabedoria interior. Há verdades ocultas aguardando serem reveladas; confie no seu silêncio interno mais do que na lógica externa.',
+            major_03: 'A Imperatriz representa fertilidade, abundância e criatividade. Momento de nutrir projetos, cuidar do corpo e celebrar a beleza e os prazeres sensoriais da vida.',
+            major_04: 'O Imperador evoca estrutura, autoridade e estabilidade. É hora de assumir o controle, estabelecer limites claros e agir com disciplina e liderança firme.',
+            major_05: 'O Hierofante trata de tradição, ensinamento e espiritualidade institucional. Busque orientação em mestres, instituições ou conhecimentos consolidados; respeite os rituais.',
+            major_06: 'Os Amantes falam de escolha, união e valores. Uma decisão importante do coração se apresenta — alinhe suas ações com aquilo que realmente importa para você.',
+            major_07: 'O Carro representa vontade, determinação e vitória. Com foco e autodisciplina, você supera obstáculos e avança rumo ao triunfo, mantendo as rédeas firmes.',
+            major_08: 'A Força simboliza coragem, paciência e força interior. A verdadeira potência vem da compaixão e do autocontrole, não da brutalidade. Domine seus instintos com suavidade.',
+            major_09: 'O Eremita fala de introspecção, solitude e busca interior. É tempo de se afastar do ruído externo, refletir profundamente e buscar sua própria luz para iluminar o caminho.',
+            major_10: 'A Roda da Fortuna representa ciclos, destino e mudança. A vida gira — o que estava embaixo sobe e vice-versa. Aceite o fluxo e aproveite as oportunidades do momento.',
+            major_11: 'A Justiça trata de equilíbrio, verdade e causa e efeito. Suas ações retornam a você. Seja honesto, assuma responsabilidades e busque decisões imparciais.',
+            major_12: 'O Enforcado sugere pausa, sacrifício e nova perspectiva. Ao invés de lutar, entregue-se; a inversão do olhar revela verdades que a pressa não permite ver.',
+            major_13: 'A Morte significa transformação profunda e fim de ciclo. Não é necessariamente literal — trata-se de deixar morrer o que já não serve para que o novo possa nascer.',
+            major_14: 'A Temperança fala de moderação, equilíbrio e alquimia interior. Combine opostos com paciência, encontre o meio-termo e permita que o tempo faça sua magia.',
+            major_15: 'O Diabo representa tentação, apego e materialismo. Cuidado com vícios, dependências e ilusões que aprisionam. Reconheça suas sombras para se libertar.',
+            major_16: 'A Torre simboliza ruptura súbita, revelação e libertação. Uma estrutura desmorona para dar lugar à verdade. Doi, mas é necessária — o que cai não tinha base sólida.',
+            major_17: 'A Estrela traz esperança, cura e inspiração. Após a tempestade, vem a calmaria. Confie no futuro, cuide de si e permita-se sonhar novamente com serenidade.',
+            major_18: 'A Lua fala de ilusão, subconsciente e medo. Nem tudo é o que parece. Explore seus sonhos, enfrente suas ansiedades e deixe a intuição guiar através da névoa.',
+            major_19: 'O Sol representa sucesso, alegria e vitalidade. Clareza total, energia radiante e realização plena. Momento de celebrar, brilhar e compartilhar sua luz com o mundo.',
+            major_20: 'O Julgamento evoca despertar, renascimento e chamado. Uma verdade maior se revela e convida à transformação. Ouça o chamado interno e ressuscite para uma nova vida.',
+            major_21: 'O Mundo simboliza realização, completude e integração. Um grande ciclo se encerra com maestria. Celebre a conquista e prepare-se para expandir horizontes ainda maiores.',
+
+            Pents_01: 'Ás de Ouros: nova oportunidade financeira, semente de prosperidade. Um novo emprego, projeto ou investimento surge com grande potencial de crescimento.',
+            Pents_02: 'Dois de Ouros: equilíbrio e adaptabilidade. Você faz malabarismos entre tarefas e prioridades, mantendo tudo em harmonia com flexibilidade.',
+            Pents_03: 'Três de Ouros: colaboração, habilidade e reconhecimento profissional. Trabalho em equipe e competência técnica constroem algo sólido e duradouro.',
+            Pents_04: 'Quatro de Ouros: segurança, controle e possessividade. Cuidado com o apego excessivo — proteger é saudável, mas aprisionar não é. Abra mão do medo da perda.',
+            Pents_05: 'Cinco de Ouros: dificuldade financeira, exclusão e provação material. Momento de escassez, mas há ajuda disponível — não hesite em pedir apoio.',
+            Pents_06: 'Seis de Ouros: generosidade, caridade e equilíbrio entre dar e receber. A prosperidade flui quando compartilhada com justiça e sem expectativas.',
+            Pents_07: 'Sete de Ouros: paciência, investimento e avaliação. Os frutos ainda não amadureceram — persevere e reavalie se vale continuar investindo energia.',
+            Pents_08: 'Oito de Ouros: aprendizado, dedicação e maestria. O esforço consistente e a prática diária conduzem à excelência. Continue aperfeiçoando seu ofício.',
+            Pents_09: 'Nove de Ouros: independência, autossuficiência e luxo. Você colhe os frutos do próprio trabalho e desfruta de conforto merecido. Aprecie suas conquistas.',
+            Pents_10: 'Dez de Ouros: legado, riqueza e estabilidade familiar. Prosperidade duradoura que beneficia gerações. Bases sólidas foram construídas com sabedoria.',
+            Pents_11: 'Valete de Ouros: estudo, foco prático e nova oportunidade. Um aprendiz dedicado se abre para o mundo material com curiosidade e disciplina.',
+            Pents_12: 'Cavaleiro de Ouros: diligência, responsabilidade e confiabilidade. Progresso lento mas seguro. A rotina bem executada leva ao sucesso concreto.',
+            Pents_13: 'Rainha de Ouros: praticidade, nutrição e abundância. Mulher acolhedora que cuida do lar e dos recursos com sabedoria e generosidade.',
+            Pents_14: 'Rei de Ouros: abundância, autoridade material e estabilidade. Mestre da prosperidade que constrói impérios com visão prática e liderança firme.',
+
+            Cups_01: 'Ás de Copas: novo amor, abertura emocional e compaixão. O coração transborda — um novo relacionamento ou despertar afetivo se inicia.',
+            Cups_02: 'Dois de Copas: união, parceria e atração. Dois corações se encontram em harmonia. Conexão sincera que merece ser celebrada.',
+            Cups_03: 'Três de Copas: celebração, amizade e comunidade. Momento de alegria compartilhada, reuniões e gratidão pelas pessoas queridas ao redor.',
+            Cups_04: 'Quatro de Copas: apatia, tédio e insatisfação. Você tem oportunidades à frente, mas está entediado ou fechado. Olhe ao redor com novos olhos.',
+            Cups_05: 'Cinco de Copas: perda, luto e arrependimento. Há sofrimento, mas nem tudo está perdido — ainda restam copas de pé. Volte-se para o que permanece.',
+            Cups_06: 'Seis de Copas: nostalgia, inocência e memórias. Reencontros com o passado, amizades de infância ou revisitar raízes trazem ternura e cura.',
+            Cups_07: 'Sete de Copas: ilusões, escolhas e fantasia. Muitas opções, mas nem todas reais. Cuidado com devaneios — é hora de distinguir sonho de realidade.',
+            Cups_08: 'Oito de Copas: abandono, busca e transição. Deixar para trás o que já não satisfaz em busca de algo mais profundo é um ato de coragem.',
+            Cups_09: 'Nove de Copas: satisfação, desejos realizados e contentamento. O "desejo concedido" — você colhe a alegria merecida. Aproveite com gratidão.',
+            Cups_10: 'Dez de Copas: harmonia, família e felicidade plena. Realização emocional completa, paz no lar e laços afetivos verdadeiramente satisfatórios.',
+            Cups_11: 'Valete de Copas: mensagem emocional, sensibilidade e criatividade. Um convite afetivo, uma notícia do coração ou o despertar de um dom artístico.',
+            Cups_12: 'Cavaleiro de Copas: romantismo, idealismo e proposta. Um mensageiro do amor traz convite ou declaração. Siga seu coração com poesia, mas sem perder o chão.',
+            Cups_13: 'Rainha de Copas: empatia, intuição e compaixão. Mulher sensível que cuida com o coração, escuta com profundidade e confia em sua intuição.',
+            Cups_14: 'Rei de Copas: maturidade emocional, equilíbrio e diplomacia. Homem que domina os mares internos com serenidade e aconselha com sabedoria emocional.',
+
+            Swords_01: 'Ás de Espadas: clareza, verdade e avanço mental. Uma nova ideia, decisão ou revelação corta a névoa. A verdade liberta e impulsiona.',
+            Swords_02: 'Dois de Espadas: impasse, escolha difícil e equilíbrio tenso. Você está vendado, evitando decidir. Rompa a inércia e enfrente a escolha.',
+            Swords_03: 'Três de Espadas: dor, traição e separação. Mágoa profunda, mas necessária. Permita-se sentir e depois cure — a verdade dói, mas liberta.',
+            Swords_04: 'Quatro de Espadas: descanso, recuperação e retiro. Pause. O corpo e a mente pedem silêncio. Recupere forças antes de retomar a batalha.',
+            Swords_05: 'Cinco de Espadas: conflito, derrota e vitória vazia. Ganhar a qualquer custo pode trazer solidão. Considere se vale insistir na disputa.',
+            Swords_06: 'Seis de Espadas: transição, travessia e afastamento. Você deixa uma fase difícil rumo a águas mais calmas. A jornada é silenciosa, mas necessária.',
+            Swords_07: 'Sete de Espadas: estratégia, engano e autonomia. Agir com astúcia ou dissimulação. Cuidado com traições — inclusive consigo mesmo.',
+            Swords_08: 'Oito de Espadas: restrição e aprisionamento mental. As grades existem mais na mente do que na realidade. Liberte-se dos pensamentos que aprisionam.',
+            Swords_09: 'Nove de Espadas: ansiedade, pesadelos e angústia. A mente atormenta com medos noturnos. Busque apoio, respire — o pior é maior na imaginação.',
+            Swords_10: 'Dez de Espadas: fim doloroso, traição final e derrota. Um ciclo encerra-se bruscamente. Mas veja: o sol nasce ao fundo. O pior já passou.',
+            Swords_11: 'Valete de Espadas: curiosidade, vigilância e novas ideias. Aprendiz atento que busca a verdade, faz perguntas e observa tudo com olhar afiado.',
+            Swords_12: 'Cavaleiro de Espadas: ação rápida, impetuosidade e defesa. Mensageiro veloz que ataca sem hesitar. Cuidado com palavras precipitadas.',
+            Swords_13: 'Rainha de Espadas: clareza mental, independência e percepção. Mulher que enxerga através das aparências e fala verdades com elegância e firmeza.',
+            Swords_14: 'Rei de Espadas: autoridade intelectual, julgamento e verdade. Mestre da lógica que decide com imparcialidade e lidera pela razão e ética.',
+
+            Wands_01: 'Ás de Paus: inspiração, novo projeto e faísca criativa. Uma ideia poderosa surge com energia para começar. O momento de agir é agora.',
+            Wands_02: 'Dois de Paus: planejamento, decisão e visão de futuro. Você contempla o horizonte, avaliando caminhos. Escolha com coragem e trace o plano.',
+            Wands_03: 'Três de Paus: expansão, exploração e progresso. Seus navios partem — os primeiros resultados chegam. Amplie horizontes e confie na jornada.',
+            Wands_04: 'Quatro de Paus: celebração, harmonia e lar. Momento de festejar conquistas, reunir a família e agradecer pelas bases que sustentam sua vida.',
+            Wands_05: 'Cinco de Paus: competição, conflito e rivalidade. Desafios e disputas surgem. Use a tensão para crescer — a competição saudável fortalece.',
+            Wands_06: 'Seis de Paus: vitória, reconhecimento e sucesso público. Você é aclamado por suas conquistas. Aceite os louros com humildade e siga em frente.',
+            Wands_07: 'Sete de Paus: defesa, persistência e coragem. Você está em posição elevada, defendendo o que conquistou. Mantenha-se firme — vale a pena lutar.',
+            Wands_08: 'Oito de Paus: movimento rápido, ação e notícias. Eventos aceleram. Mensagens chegam, viagens se aproximam — tudo flui com velocidade.',
+            Wands_09: 'Nove de Paus: resiliência, perseverança e última resistência. Você está ferido mas de pé, quase no fim. Não desista agora — falta pouco.',
+            Wands_10: 'Dez de Paus: sobrecarga, responsabilidade e fardo. Você carrega peso demais sozinho. Aprenda a delegar, descansar e confiar em quem está perto.',
+            Wands_11: 'Valete de Paus: entusiasmo, descoberta e mensagem criativa. Jovem aventureiro com faísca nos olhos. Novidades empolgantes estão a caminho.',
+            Wands_12: 'Cavaleiro de Paus: aventura, impulsividade e paixão. Cavaleiro ardente que parte para a ação sem hesitar. Siga sua chama, mas cuidado com a precipitação.',
+            Wands_13: 'Rainha de Paus: carisma, determinação e calor. Mulher magnética que lidera com paixão e inspira quem está ao redor com sua energia vibrante.',
+            Wands_14: 'Rei de Paus: visão, liderança e empreendedorismo. Mestre da criação que transforma ideias em impérios. Líder nato, visionário e ousado.'
+        };
+
+        // ===== SIGNIFICADOS INVERTIDOS =====
+        const CARD_MEANINGS_REVERSED = {
+            major_00: 'Louco invertido: imprudência, riscos desnecessários e falta de direção. Você pode estar agindo por impulso ou fugindo de responsabilidades. Antes de saltar, olhe onde vai cair.',
+            major_01: 'Mago invertido: manipulação, talento desperdiçado ou ilusão. Cuidado com promessas vazias — suas ou de outros. O poder existe, mas está sendo mal direcionado.',
+            major_02: 'Sacerdotisa invertida: intuição ignorada, segredos mal guardados ou superficialidade. Você está desconectado do próprio interior. Silencie e volte a escutar.',
+            major_03: 'Imperatriz invertida: dependência, criatividade bloqueada ou abandono do autocuidado. Você negligencia a si mesmo para cuidar dos outros. Nutra-se primeiro.',
+            major_04: 'Imperador invertido: tirania, rigidez ou abuso de poder. Controle excessivo sufoca. Reveja se está impondo em vez de liderar, ou se está submisso a alguém autoritário.',
+            major_05: 'Hierofante invertido: dogmatismo, hipocrisia ou rebeldia vazia. Questionar tradições é saudável, mas negar tudo por princípio também aprisiona. Busque sua própria fé.',
+            major_06: 'Amantes invertidos: desarmonia, escolha equivocada ou desequilíbrio. Há conflito de valores ou fuga do compromisso. Encare a decisão que você tem adiado.',
+            major_07: 'Carro invertido: falta de direção, impulsividade descontrolada ou derrota. As rédeas escaparam. Pare, reorganize o plano e retome com foco antes de avançar.',
+            major_08: 'Força invertida: fraqueza, insegurança ou descontrole emocional. Você está dominado pelos instintos em vez de dominá-los. Reconstrua a autoconfiança com paciência.',
+            major_09: 'Eremita invertido: isolamento excessivo, solidão amarga ou fuga do mundo. O retiro virou prisão. É hora de voltar a se conectar — sem perder a profundidade.',
+            major_10: 'Roda da Fortuna invertida: resistência à mudança, ciclos repetitivos ou má sorte. Você luta contra o fluxo. Solte o controle e permita que o ciclo se complete.',
+            major_11: 'Justiça invertida: injustiça, desonestidade ou fuga da responsabilidade. Algo está desequilibrado — seja você quem age com parcialidade ou quem sofre por ela. Reveja as contas.',
+            major_12: 'Enforcado invertido: resistência inútil, sacrifício vão ou vitimização. Você se agarra ao que devia soltar. O martírio não traz sabedoria — entregue-se de verdade ou saia.',
+            major_13: 'Morte invertida: resistência à transformação, medo da mudança ou estagnação. Você segura o que já morreu. A dor de soltar é menor que a dor de permanecer parado.',
+            major_14: 'Temperança invertida: desequilíbrio, excessos ou impaciência. Você quer resultados imediatos e mistura tudo sem medida. Volte ao meio-termo e respeite o tempo.',
+            major_15: 'Diabo invertido: libertação, quebra de vícios e reconhecimento das sombras. Você começa a se libertar de uma dependência. Momento de coragem para cortar o que aprisiona.',
+            major_16: 'Torre invertida: desastre evitado, mudança adiada ou catástrofe interna. A ruptura não veio de fora, mas ruge por dentro. Deixe desmoronar antes que tudo caia de vez.',
+            major_17: 'Estrela invertida: desesperança, falta de fé ou desânimo. Você perdeu a conexão com o futuro. Reencontre pequenas alegrias — a cura começa no cotidiano.',
+            major_18: 'Lua invertida: confusão dissipada, medos enfrentados ou clareza emergindo. A névoa está baixando. Você começa a distinguir ilusão de verdade. Continue atravessando.',
+            major_19: 'Sol invertido: tristeza, sucesso adiado ou falta de vitalidade. A alegria existe, mas está encoberta. Cuide do corpo e da mente — a luz volta quando você se permite brilhar.',
+            major_20: 'Julgamento invertido: autocrítica excessiva, negação do chamado ou dúvida. Você ouve o chamado, mas se sabota. Perdoe-se e responda — a segunda chance é real.',
+            major_21: 'Mundo invertido: incompletude, atraso ou falta de fechamento. Algo ficou pelo caminho. Reveja o que precisa ser concluído antes de celebrar. O fim está próximo.',
+
+            Pents_01: 'Ás de Ouros invertido: oportunidade perdida, ganho instável ou avareza. Uma chance concreta escapou ou está sendo mal aproveitada. Reveja sua relação com dinheiro e recursos.',
+            Pents_02: 'Dois de Ouros invertido: desorganização, sobrecarga ou malabarismo caótico. Você tenta equilibrar demais e está prestes a deixar algo cair. Priorize e delegue.',
+            Pents_03: 'Três de Ouros invertido: trabalho em equipe falho, falta de reconhecimento ou mediocridade. Sua contribuição não está sendo valorizada — ou você não está se dedicando o suficiente.',
+            Pents_04: 'Quatro de Ouros invertido: desapego forçado, generosidade repentina ou perda de controle. Você é obrigado a soltar o que segurava. Pode doer, mas liberta. Aprenda a confiar.',
+            Pents_05: 'Cinco de Ouros invertido: recuperação, ajuda aceita ou fim da escassez. A maré está virando. Você finalmente pede ou recebe apoio. A saída da dificuldade está próxima.',
+            Pents_06: 'Seis de Ouros invertido: dívidas, generosidade interesseira ou desequilíbrio. Cuidado com relações onde há troca desigual — você dá demais ou exige demais. Restabeleça a justiça.',
+            Pents_07: 'Sete de Ouros invertido: impaciência, esforço em vão ou colheita ruim. Você investiu, mas os frutos não vieram. Reavalie se vale continuar ou se é hora de mudar de estratégia.',
+            Pents_08: 'Oito de Ouros invertido: perfeccionismo paralisante, trabalho repetitivo ou falta de foco. Você se perde nos detalhes ou faz sempre o mesmo. Renove o aprendizado.',
+            Pents_09: 'Nove de Ouros invertido: dependência financeira, luxo vazio ou insegurança material. A independência que parecia sólida está frágil. Reveja gastos e construa bases reais.',
+            Pents_10: 'Dez de Ouros invertido: instabilidade familiar, herança problemática ou perda material. O alicerce que parecia eterno está rachando. Reconstrua o que importa com o essencial.',
+            Pents_11: 'Valete de Ouros invertido: procrastinação, falta de foco ou oportunidade perdida. O estudo não avança, o novo projeto patina. Reencontre o propósito prático que te move.',
+            Pents_12: 'Cavaleiro de Ouros invertido: teimosia, estagnação ou irresponsabilidade. Você insiste num caminho que não flui ou abandona compromissos. Retome o passo — mesmo que lento.',
+            Pents_13: 'Rainha de Ouros invertido: negligência, desorganização ou dependência emocional. Você cuida de todos menos de si. O corpo e o lar clamam por atenção. Priorize-se.',
+            Pents_14: 'Rei de Ouros invertido: avareza, teimosia ou perda material. O medo da escassez te domina. Você acumula em vez de investir. Volte a confiar no fluxo da prosperidade.',
+
+            Cups_01: 'Ás de Copas invertido: bloqueio emocional, coração fechado ou vazio interior. A fonte está represada. Permita-se sentir novamente — mesmo que a dor venha primeiro.',
+            Cups_02: 'Dois de Copas invertido: desunião, desequilíbrio ou mal-entendidos. A parceria passa por crise. Diálogo sincero é necessário — ou aceitar que o ciclo se encerrou.',
+            Cups_03: 'Três de Copas invertido: fofoca, isolamento ou excessos sociais. A celebração virou drama. Cuidado com amizades tóxicas e com quem fala de você pelas costas.',
+            Cups_04: 'Quatro de Copas invertido: abertura, novas oportunidades percebidas ou ação. O tédio se rompe — você finalmente enxerga o que estava bem diante dos olhos. Aproveite.',
+            Cups_05: 'Cinco de Copas invertido: aceitação, superação e perdão. Você olha para trás sem ser destruído. As copas caídas ficaram — é hora de pegar as que restam e seguir.',
+            Cups_06: 'Seis de Copas invertido: preso ao passado, imaturidade ou saudade paralisante. Você idealiza um tempo que não volta. Honre a memória, mas volte ao presente.',
+            Cups_07: 'Sete de Copas invertido: clareza, decisões firmes ou ilusões desfeitas. As fantasias caem e você vê o real. Menos opções, mais verdade. Escolha com o pé no chão.',
+            Cups_08: 'Oito de Copas invertido: medo de partir, retorno ou indecisão. Você sabe que precisa ir, mas permanece por apego. O caminho chama — reúna coragem.',
+            Cups_09: 'Nove de Copas invertido: insatisfação, desejos superficiais ou ganância. Tudo o que queria está aí, mas não basta. A verdadeira alegria mora em outro lugar.',
+            Cups_10: 'Dez de Copas invertido: desarmonia familiar, rompimento ou conflitos íntimos. O "lar feliz" revelou rachaduras. Cuide dos laços reais — não da imagem ideal.',
+            Cups_11: 'Valete de Copas invertido: imaturidade emocional, bloqueio criativo ou más notícias afetivas. Um convite desfeito ou um sentimento que não amadurece. Dê tempo ao coração.',
+            Cups_12: 'Cavaleiro de Copas invertido: manipulação, ciúme ou idealização excessiva. A promessa romântica esconde algo. Cuidado com quem confunde amor com posse.',
+            Cups_13: 'Rainha de Copas invertido: instabilidade emocional, dependência afetiva ou vitimização. Você se afoga nas próprias emoções. Reencontre o centro antes de cuidar de outros.',
+            Cups_14: 'Rei de Copas invertido: manipulação emocional, frieza ou repressão de sentimentos. Você sufoca o que sente ou manipula quem ama. Abra o coração — é seguro.',
+
+            Swords_01: 'Ás de Espadas invertido: confusão, ideias mal formuladas ou comunicação falha. A clareza está ofuscada. Antes de falar ou decidir, organize os pensamentos.',
+            Swords_02: 'Dois de Espadas invertido: decisão finalmente tomada, fim do impasse ou informação revelada. A venda cai. Você vê o que precisava ver — agora aja com base nisso.',
+            Swords_03: 'Três de Espadas invertido: cura, perdão ou fim do sofrimento. A ferida começa a fechar. Você solta a mágoa e respira de novo. O luto vai embora devagar.',
+            Swords_04: 'Quatro de Espadas invertido: inquietação, retomada precoce ou exaustão. Você quer voltar à ação antes de estar pronto. O corpo cobrará. Descanse de verdade.',
+            Swords_05: 'Cinco de Espadas invertido: reconciliação, fim do conflito ou arrependimento. A briga cansou. Há espaço para trégua — se houver humildade dos dois lados.',
+            Swords_06: 'Seis de Espadas invertido: resistência à mudança, retorno ao caos ou atraso. Você sabe que precisa atravessar, mas volta à margem. Confie no barqueiro.',
+            Swords_07: 'Sete de Espadas invertido: confissão, arrependimento ou retorno. O que foi escondido vem à tona. Você devolve o que pegou ou revela a verdade. Libertação.',
+            Swords_08: 'Oito de Espadas invertido: libertação, autoconfiança ou saída do cárcere. As grades se abrem. Você percebe que sempre teve a chave. Saia com coragem.',
+            Swords_09: 'Nove de Espadas invertido: recuperação, medos superados ou apoio encontrado. A noite mais escura passou. Você pede ajuda e a angústia começa a ceder.',
+            Swords_10: 'Dez de Espadas invertido: sobrevivência, recuperação ou fim do pior. Você foi ao fundo e sobreviveu. Levante-se devagar — o novo ciclo começa agora.',
+            Swords_11: 'Valete de Espadas invertido: tagarelice, falta de foco ou espionagem. Palavras demais, ações de menos. Cuidado com fofocas e curiosidade invasiva.',
+            Swords_12: 'Cavaleiro de Espadas invertido: agressividade, pressa ou imprudência. Você atropela tudo com palavras e gestos. Freie. A precipitação traz consequências.',
+            Swords_13: 'Rainha de Espadas invertido: amargura, frieza ou julgamento severo. A clareza virou crueldade. Cuidado com a língua afiada — verdade sem compaixão fere.',
+            Swords_14: 'Rei de Espadas invertido: tirania intelectual, abuso do poder ou rigidez. Você usa a lógica como arma. Ou se submete a alguém assim. Reencontre a ética.',
+
+            Wands_01: 'Ás de Paus invertido: falta de inspiração, plano fracassado ou procrastinação. A faísca não acendeu. Antes de começar de novo, entenda por que a chama apagou.',
+            Wands_02: 'Dois de Paus invertido: medo do desconhecido, falta de planejamento ou indecisão. Você quer expandir, mas trava. Trace um plano concreto antes de partir.',
+            Wands_03: 'Três de Paus invertido: atraso, obstáculos ou frustração. Os navios demoram a voltar. A expansão encontra resistência. Persista — ou reavalie a rota.',
+            Wands_04: 'Quatro de Paus invertido: conflito familiar, instabilidade no lar ou celebração adiada. A base tremeu. Cuide das relações próximas antes de festejar.',
+            Wands_05: 'Cinco de Paus invertido: fim do conflito, harmonia ou trégua. A rivalidade arrefece. Momento de baixar as armas e reconstruir pontes.',
+            Wands_06: 'Seis de Paus invertido: sucesso sem reconhecimento, arrogância ou vitória vazia. Você venceu, mas não sente. Ou se deixou levar pelo ego. Reencontre a humildade.',
+            Wands_07: 'Sete de Paus invertido: desistência, rendição ou desânimo. Você lutou, mas está cansado de defender. Considere se vale continuar — ou se é hora de soltar.',
+            Wands_08: 'Oito de Paus invertido: atrasos, confusão ou mensagens perdidas. O fluxo travou. Notícias esperadas não chegam. Paciência — o movimento retorna.',
+            Wands_09: 'Nove de Paus invertido: paranoia, cansaço extremo ou desistência. Você está exausto de tanto lutar. Peça ajuda. Sozinho, o fardo é grande demais.',
+            Wands_10: 'Dez de Paus invertido: alívio do fardo, delegação ou fim da sobrecarga. Você finalmente solta o peso. Aprenda a dividir responsabilidades — não é fraqueza.',
+            Wands_11: 'Valete de Paus invertido: falta de rumo, desânimo ou más notícias. O entusiasmo esfriou. Reencontre o que te acende — o fogo precisa de novo combustível.',
+            Wands_12: 'Cavaleiro de Paus invertido: impulsividade, irresponsabilidade ou promessas vazias. A aventura virou fuga. Freie o ímpeto e assuma compromissos reais.',
+            Wands_13: 'Rainha de Paus invertido: ciúme, egoísmo ou instabilidade. O carisma virou manipulação. Cuidado com a necessidade de holofotes — brilhe sem ofuscar.',
+            Wands_14: 'Rei de Paus invertido: tirania, expectativas excessivas ou intolerância. Você impõe sua visão sem escutar. Liderança sem empatia vira ditadura. Reveja o exemplo.'
+        };
+
+
+        // ===== CONSELHO DO DIA + AÇÃO PRÁTICA - NOVO =====
+        const CONSELHO_ACAO = {
+            major_00: { conselho: "Pare de esperar o momento perfeito. A vida não dá garantias, dá convites.", acao: "Faça algo pela primeira vez hoje sem pesquisar antes. Chame alguém, comece aquele projeto, vá por um caminho novo.", emoji: "" },
+            major_01: { conselho: "Você já tem as ferramentas. Falta decidir usá-las.", acao: "Escreva 3 coisas que quer criar esse mês e dê o primeiro passo de 15 minutos hoje em uma delas.", emoji: "" },
+            major_02: { conselho: "Sua intuição já sabe a resposta. O barulho externo está alto demais.", acao: "Fique 10 minutos em silêncio total hoje, sem celular. Anote o que vier, sem julgar.", emoji: "" },
+            major_03: { conselho: "Nutrir não é luxo, é base. Você não floresce em solo seco.", acao: "Faça algo que nutra seu corpo ou criatividade hoje: cozinhe algo gostoso, cuide de uma planta, dance.", emoji: "" },
+            major_04: { conselho: "Limite é amor em forma de estrutura. Sem ele, tudo desmorona.", acao: "Organize sua mesa/agenda e diga um NÃO necessário hoje. Com gentileza e firmeza.", emoji: "" },
+            major_05: { conselho: "Você não precisa inventar a roda sozinho. Alguém já trilhou esse caminho.", acao: "Ligue ou mande mensagem pra alguém que já fez o que você quer fazer. Pergunte: como você começou?", emoji: "" },
+            major_06: { conselho: "Toda escolha é um espelho dos seus valores. O que seu coração realmente prioriza?", acao: "Escreva 3 valores inegociáveis pra você e tome a decisão de hoje baseada neles.", emoji: "" },
+            major_07: { conselho: "Foco não é fazer mais, é tirar a distração do caminho.", acao: "Bloqueie 1 hora hoje sem notificações para sua meta mais importante. Só 1 hora com rédea firme.", emoji: "" },
+            major_08: { conselho: "Força de verdade é mansa. Você não precisa rugir para ser respeitado.", acao: "Tenha hoje aquela conversa difícil que você está evitando, mas com calma e compaixão.", emoji: "" },
+            major_09: { conselho: "A resposta que você busca não está fora. Está no intervalo entre os ruídos.", acao: "Fique 1h offline hoje à noite. Sem feed, sem grupo. Só você e um caderno.", emoji: "" },
+            major_10: { conselho: "A roda gira. Resistir ao ciclo só aumenta o sofrimento.", acao: "Mude um micro-hábito hoje para girar sua energia: acorde 30min antes, troque o caminho, tente outra comida.", emoji: "" },
+            major_11: { conselho: "Tudo volta. O que você planta hoje, colhe amanhã.", acao: "Resolva hoje uma pendência que você está empurrando. Assuma, pague, responda, finalize.", emoji: "" },
+            major_12: { conselho: "Às vezes avançar é parar e olhar de outro ângulo.", acao: "Peça a opinião de alguém que pensa totalmente diferente de você sobre sua situação.", emoji: "" },
+            major_13: { conselho: "Algo precisa morrer para que o novo nasça. Segurar está doendo mais.", acao: "Delete/arquive 5 coisas hoje: arquivos, roupas, prints, contatos que não servem mais. Crie espaço.", emoji: "" },
+            major_14: { conselho: "Equilíbrio não é ter tudo igual, é saber dosar.", acao: "Hoje: + água, + 20 min de caminhada, - 1 exagero que você conhece bem.", emoji: "" },
+            major_15: { conselho: "Olhe com honestidade: o que está te prendendo? É real ou é apego?", acao: "Fique 24h sem 1 vício comportamental: reclamar, checar ex, açúcar, reclamar do trabalho.", emoji: "" },
+            major_16: { conselho: "A queda dói, mas revela o que era falso. A verdade liberta, mesmo quebrando.", acao: "Admita hoje uma verdade que você está evitando. Fale em voz alta ou escreva. Sem filtro.", emoji: "" },
+            major_17: { conselho: "Depois da noite, sempre vem luz. Permita-se ter esperança de novo.", acao: "Escreva 3 motivos para acreditar no seu futuro e mande uma mensagem de esperança pra alguém.", emoji: "" },
+            major_18: { conselho: "Nem todo medo é aviso, alguns são só sombras do passado.", acao: "Anote um medo ou sonho que teve essa semana e pergunte: o que isso quer me mostrar?", emoji: "" },
+            major_19: { conselho: "Você tem luz própria. Pare de pedir permissão para brilhar.", acao: "Comemore algo pequeno hoje em voz alta e elogie sinceramente alguém. Compartilhe seu sol.", emoji: "" },
+            major_20: { conselho: "É hora de ressuscitar. O passado não precisa te definir para sempre.", acao: "Perdoe alguém hoje. Pode ser você mesmo. Escreva uma carta de perdão e não precisa enviar.", emoji: "" },
+            major_21: { conselho: "Um ciclo se encerra. Você fez mais do que imagina. Celebre.", acao: "Finalize algo que está 90% pronto. Aquela gaveta, aquele texto, aquela conversa. Feche com chave de ouro.", emoji: "" },
+        };
+
+        // Ações para Arcanos Menores - fallback inteligente
+        const ACOES_NAIPE = {
+            'Ouros': {
+                conselho: "O universo material responde ao cuidado prático. Pequenas atitudes financeiras valem mais que grandes sonhos.",
+                acoes: ["Organize sua carteira e anote 3 gastos desnecessários da semana", "Guarde R$10 hoje, por menor que pareça, é o gesto que importa", "Organize sua mesa de trabalho por 15 minutos", "Ligue pra resolver uma pendência financeira", "Anote 1 habilidade que pode te gerar renda extra"]
+            },
+            'Copas': {
+                conselho: "Seu coração está pedindo atenção. Sentir não é fraqueza, é bússola.",
+                acoes: ["Mande mensagem pra alguém que você sente saudade, sem esperar nada em troca", "Escreva como você está se sentindo de verdade hoje", "Faça algo gentil por alguém sem contar pra ninguém", "Beba água ouvindo uma música que te emociona", "Diga 'eu te amo' ou 'sinto sua falta' pra alguém importante"]
+            },
+            'Espadas': {
+                conselho: "Sua mente está barulhenta. Clareza vem do corte, não do acúmulo.",
+                acoes: ["Escreva seus pensamentos por 10 minutos sem parar, depois rasgue", "Tenha aquela conversa sincera que você está ensaiando na cabeça", "Desligue notificações por 2 horas e foque em 1 coisa só", "Anote 3 pensamentos que não são fatos, são histórias", "Peça desculpas por algo que falou sem pensar ou perdoe algo que ouviu"]
+            },
+            'Paus': {
+                conselho: "Sua energia criativa está pedindo movimento. Ideia sem ação vira culpa.",
+                acoes: ["Comece aquele projeto por 20 minutos, sem precisar terminar", "Faça 20 minutos de exercício, dança ou caminhada rápida", "Mande aquela mensagem de trabalho/oportunidade que está adiando", "Aprenda algo novo por 15 minutos no YouTube", "Diga SIM para um convite que você normalmente diria não"]
+            }
+        };
+
+        const ACOES_NUMERO = {
+            'Ás': "Comece hoje, mesmo pequeno.",
+            '2': "Equilibre e peça ajuda.",
+            '3': "Colabore com alguém.",
+            '4': "Organize sua base.",
+            '5': "Enfrente o conflito.",
+            '6': "Compartilhe o que tem.",
+            '7': "Reflita antes de agir.",
+            '8': "Aja rápido, não enrole.",
+            '9': "Persista, falta pouco.",
+            '10': "Finalize e celebre.",
+            'Valete': "Aprenda algo novo.",
+            'Cavaleiro': "Avance com coragem.",
+            'Rainha': "Acolha com carinho.",
+            'Rei': "Lidere com exemplo."
+        };
+
+        function getConselhoAcao(cardData, isReversed) {
+            const key = cardData.key;
+            if (CONSELHO_ACAO[key]) {
+                const base = CONSELHO_ACAO[key];
+                if (isReversed) {
+                    return {
+                        conselho: "Versão invertida: " + base.conselho.replace(".", ", mas no avesso. Olhe onde você está fazendo o oposto disso."),
+                        acao: base.acao + " No modo invertido: faça o contrário do seu padrão. Se você sempre foge, enfrente. Se sempre enfrenta, recue e observe.",
+                        emoji: base.emoji
+                    };
+                }
+                return base;
+            }
+            // Menores
+            const partes = cardData.name.split(' de ');
+            const num = partes[0];
+            const naipe = partes[1] || 'Ouros';
+            const naipeInfo = ACOES_NAIPE[naipe] || ACOES_NAIPE['Ouros'];
+            const acaoNumero = ACOES_NUMERO[num] || "Dê o próximo passo.";
+            const acaoAleatoria = naipeInfo.acoes[Math.floor(Math.random()*naipeInfo.acoes.length)];
+            return {
+                conselho: naipeInfo.conselho + " " + acaoNumero,
+                acao: acaoAleatoria + " - " + cardData.name + " te chama pra isso hoje.",
+                emoji: ''
+            };
+        }
+
+        function copiarAcao(context) {
+            let texto = "";
+            if (context === 'daily') {
+                texto = document.getElementById('daily-conselho')?.textContent + "\n\nAção: " + document.getElementById('daily-acao')?.textContent;
+            }
+            if (texto && navigator.clipboard) {
+                navigator.clipboard.writeText(texto).then(()=> {
+                    if (navigator.vibrate) navigator.vibrate(40);
+                    alert('Copiado! Cole no seu status ou diário');
+                });
+            }
+        }
+        function compartilharAcao(context) {
+            let texto = "";
+            if (context === 'daily') {
+                const nome = document.getElementById('daily-name')?.textContent || "Carta do dia";
+                texto = `Minha carta de hoje: ${nome}\nConselho: ${document.getElementById('daily-conselho')?.textContent}\nAção: ${document.getElementById('daily-acao')?.textContent}\n\nVia Tarot Rider-Waite`;
+            }
+            if (navigator.share && texto) {
+                navigator.share({title: 'Meu Conselho do Dia - Tarot', text: texto});
+            } else if (texto) {
+                copiarAcao(context);
+            }
+        }
+        function marcarFeito(context) {
+            const hoje = new Date().toISOString().split('T')[0];
+            localStorage.setItem('tarot_acao_feita_' + hoje, 'true');
+            const btns = document.querySelectorAll('.ca-btn');
+            btns.forEach(b=> { if(b.textContent.includes('Fiz')) { b.textContent='Feito!'; b.style.background='var(--gold)'; b.style.color='#1d1322'; }});
+            if (navigator.vibrate) navigator.vibrate([50,30,50]);
+            // gatilho de comentário
+            setTimeout(()=> {
+                if (confirm('Boa! Você fez sua ação prática! Quer contar como foi? Isso inspira outras pessoas')) {
+                    const el = document.getElementById('daily-acao');
+                    if (el) el.innerHTML += '<br><br><em style="color:var(--gold);">Deixe nos comentários do site como foi sua ação hoje! Ex: "Fiz e acertou em cheio!"</em>';
+                }
+            }, 300);
+        }
+
+
+        // ===== SISTEMA DE COMBINAÇÕES DE CARTAS - NOVO =====
+        const COMBINACOES_ESPECIAIS = {
+            // formato: chave ordenada alfabeticamente key1+key2
+            'major_00+major_21': { titulo: 'O Louco + O Mundo: Ciclo Completo', texto: 'Essa combinação fala de <strong>início e fim ao mesmo tempo</strong>. Você está fechando um grande ciclo e já sendo chamado para uma nova aventura. É o famoso "fim que é começo". Não tenha medo de celebrar e já se jogar no próximo.', tag: 'RARO' },
+            'major_18+major_19': { titulo: 'Sol + Lua: Verdade Vindo à Tona', texto: 'Essa é PODEROSA. A Lua esconde, o Sol revela. Essa combinação fala de <strong>segredo sendo iluminado</strong>. Algo que estava confuso, nebuloso, vai ficar claro nos próximos dias. Confie no que vai aparecer.', tag: 'RARO' },
+            'major_02+major_18': { titulo: 'Sacerdotisa + Lua: Segredos Profundos', texto: 'Intuição em nível máximo. Essa combinação fala de <strong>mistério que só seu inconsciente sabe</strong>. Seus sonhos estão te dando recados. Anote tudo que sonhar essa semana.', tag: 'RARO' },
+            'major_06+major_15': { titulo: 'Amantes + Diabo: Tentação no Amor', texto: 'Essa combinação fala de <strong>amor com apego e obsessão</strong>. Paixão intensa, mas com ciúme, controle ou dependência. Pergunte: é amor ou é medo de ficar só?', tag: 'AMOR' },
+            'major_13+major_19': { titulo: 'Morte + Sol: Renascer Feliz', texto: 'A melhor combinação de transformação! Essa fala de <strong>fim que liberta e traz alegria de verdade</strong>. Algo morre para você finalmente ser feliz. Deixe ir sem medo.', tag: 'RARO' },
+            'major_13+major_16': { titulo: 'Morte + Torre: Transformação Inevitável', texto: 'Quando essas duas saem juntas, não tem como adiar. Essa combinação fala de <strong>mudança brusca mas necessária</strong>. O que cair agora não tinha base sólida mesmo. Reconstrua do zero.', tag: 'TRANSFORMAÇÃO' },
+            'major_10+major_16': { titulo: 'Roda + Torre: Virada de Chave', texto: 'Destino dando aquela chacoalhada. Essa combinação fala de <strong>evento inesperado que muda sua rota</strong>. Pode assustar, mas é a roda te tirando do lugar errado.', tag: 'DESTINO' },
+            'major_07+major_08': { titulo: 'Carro + Força: Determinação Inabalável', texto: 'Foco + coragem. Essa combinação fala de <strong>você vai vencer se não desistir agora</strong>. Sua vontade está mais forte que os obstáculos. Acelere.', tag: 'VITÓRIA' },
+            'major_03+major_04': { titulo: 'Imperatriz + Imperador: Casal Poderoso', texto: 'Energia de poder e criação. No amor, fala de <strong>parceria que constrói império</strong>. No trabalho, projeto com estrutura para ficar grande e lucrativo.', tag: 'PODER' },
+            'major_09+major_17': { titulo: 'Eremita + Estrela: Esperança Após Isolamento', texto: 'Você se recolheu e agora a luz volta. Essa combinação fala de <strong>cura após período difícil</strong>. Sua fé está sendo restaurada. Continue se cuidando.', tag: 'CURA' },
+            'major_11+major_20': { titulo: 'Justiça + Julgamento: Acerto de Contas Kármico', texto: 'Essa combinação fala de <strong>colheita do que plantou, mas com chance de recomeço</strong>. Decisão importante vindo aí que vai te libertar de um peso antigo.', tag: 'KARMA' },
+            'major_01+major_12': { titulo: 'Mago + Enforcado: Pausa Estratégica', texto: 'Você tem o poder, mas precisa esperar. Essa combinação fala de <strong>manifestação que precisa de tempo</strong>. Pare de forçar. A ideia precisa amadurecer mais um pouco.', tag: 'MANIFESTAÇÃO' },
+            'major_15+major_18': { titulo: 'Diabo + Lua: Medo e Ilusão', texto: 'Cuidado com paranoia. Essa combinação fala de <strong>medos imaginários te prendendo</strong>. 90% do que você teme não é real. Saia da cabeça e volte para os fatos.', tag: 'ALERTA' },
+            'major_19+major_21': { titulo: 'Sol + Mundo: Sucesso Total', texto: 'JACKPOT! Uma das combinações mais positivas do tarot. Fala de <strong>realização completa, reconhecimento e alegria</strong>. O que você perguntou tem tudo para dar MUITO certo. Celebre!', tag: 'RARO' },
+            'major_05+major_09': { titulo: 'Hierofante + Eremita: Mestre Interior', texto: 'Essa combinação fala de <strong>você se tornando seu próprio mestre</strong>. Pare de buscar respostas fora. Estude, reflita, e ensine o que aprendeu.', tag: 'SABEDORIA' },
+        };
+
+        const COMBINACOES_NAIPE = {
+            'Ouros+Ouros': 'Foco total no material. Dinheiro, trabalho e segurança estão dominando sua mente. É hora de agir no concreto.',
+            'Copas+Copas': 'Coração transbordando. Emoções, amor e relacionamentos são o tema central. Siga o que sente.',
+            'Espadas+Espadas': 'Mente a mil. Você está pensando demais e sentindo de menos. Decisão precisa de clareza, não de ansiedade.',
+            'Paus+Paus': 'Fogo puro! Energia de ação, criação e impulso. Pare de planejar e comece a fazer.',
+            'Ouros+Copas': 'Coração e bolso em jogo. Decisão que envolve amor e dinheiro. Equilibre afeto e segurança.',
+            'Espadas+Copas': 'Razão vs Emoção. Seu maior conflito agora é entre o que pensa e o que sente. Qual vai vencer?',
+            'Paus+Ouros': 'Ideia com potencial de virar dinheiro. É o momento de transformar criatividade em resultado.',
+        };
+
+        function getChaveCombinacao(keyA, keyB) {
+            return [keyA, keyB].sort().join('+');
+        }
+
+        function analisarCombinacoes(cartas, posicoes) {
+            // cartas: array de cardData
+            const resultados = [];
+            
+            // 1. Verifica combinações especiais
+            for (let i = 0; i < cartas.length; i++) {
+                for (let j = i+1; j < cartas.length; j++) {
+                    const chave = getChaveCombinacao(cartas[i].key, cartas[j].key);
+                    if (COMBINACOES_ESPECIAIS[chave]) {
+                        const combo = COMBINACOES_ESPECIAIS[chave];
+                        resultados.push({
+                            tipo: 'especial',
+                            par: `${cartas[i].name} + ${cartas[j].name}`,
+                            titulo: combo.titulo,
+                            texto: combo.texto,
+                            tag: combo.tag,
+                            pos: posicoes ? `${posicoes[i]} + ${posicoes[j]}` : ''
+                        });
+                    }
+                }
+            }
+
+            // 2. Análise por naipe dominante (se não for especial ou para complementar)
+            if (cartas.length >= 2) {
+                const naipes = cartas.map(c => {
+                    if (c.key.startsWith('major_')) return 'Maior';
+                    const partes = c.name.split(' de ');
+                    return partes[1] || 'Maior';
+                });
+                
+                // Conta repetições
+                const contagem = {};
+                naipes.forEach(n => contagem[n] = (contagem[n]||0)+1);
+                const dominante = Object.entries(contagem).sort((a,b)=>b[1]-a[1])[0];
+                if (dominante && dominante[1] >= 2 && dominante[0] !== 'Maior') {
+                    const chaveNaipe = naipes.slice(0,2).sort().join('+');
+                    // tenta achar interpretação
+                    let textoNaipe = COMBINACOES_NAIPE[chaveNaipe] || `${dominante[1]} cartas de ${dominante[0]} - energia muito forte de ${dominante[0]} na sua leitura.`;
+                    if (dominante[1] >= 3) {
+                        textoNaipe = `TRÊS cartas de ${dominante[0]}! Isso é MUITO forte. O universo está gritando sobre ${dominante[0].toLowerCase()}. Não ignore. ` + textoNaipe;
+                    }
+                    resultados.push({
+                        tipo: 'energia',
+                        par: `${dominante[1]}x ${dominante[0]}`,
+                        titulo: `Energia dominante: ${dominante[0]}`,
+                        texto: textoNaipe,
+                        tag: 'ENERGIA',
+                        pos: ''
+                    });
+                }
+
+                // 3. Muitos Arcanos Maiores = destino
+                const maiores = naipes.filter(n=>n==='Maior').length;
+                if (maiores >= 2) {
+                    let textoMaior = maiores === cartas.length ? 
+                        `Todas são Arcanos Maiores! Isso é RARÍSSIMO. Sua pergunta envolve <strong>destino, carma e lição de alma</strong>. Não é por acaso.` :
+                        `${maiores} Arcanos Maiores nessa tiragem. Quando saem muitos Maiores, é sinal que <strong>o universo está falando alto</strong>. Não é detalhe do dia-a-dia, é coisa grande.`;
+                    // evita duplicar se já tem especial com maiores
+                    if (resultados.filter(r=>r.tipo==='energia' && r.titulo.includes('Maior')).length===0) {
+                        resultados.push({
+                            tipo: 'energia',
+                            par: `${maiores}x Arcano Maior`,
+                            titulo: 'Chamado do Destino',
+                            texto: textoMaior,
+                            tag: 'DESTINO',
+                            pos: ''
+                        });
+                    }
+                }
+            }
+
+            // 4. Narrativa geral para 3 cartas (Passado-Presente-Futuro)
+            if (cartas.length === 3 && posicoes && posicoes[0]==='Passado') {
+                const narrativa = `Essa sequência conta uma história: no <strong>Passado</strong>, ${cartas[0].name} mostra de onde você vem. No <strong>Presente</strong>, ${cartas[1].name} revela onde está agora. No <strong>Futuro</strong>, ${cartas[2].name} aponta para onde está indo. Juntas, elas falam de um movimento de <strong>${cartas[0].name.split(' ')[0]} → ${cartas[1].name.split(' ')[0]} → ${cartas[2].name.split(' ')[0]}</strong>.`;
+                resultados.push({
+                    tipo: 'narrativa',
+                    par: 'Linha do tempo',
+                    titulo: 'A História que as 3 Cartas Contam',
+                    texto: narrativa,
+                    tag: 'HISTÓRIA',
+                    pos: ''
+                });
+            }
+
+            return resultados.slice(0,4); // max 4 para não poluir
+        }
+
+        function renderizarCombinacoes(containerEl, cartas, posicoes) {
+            // remove antigas
+            const antiga = containerEl.querySelector('.combinacoes-section');
+            if (antiga) antiga.remove();
+
+            if (cartas.length < 2) return;
+
+            const combos = analisarCombinacoes(cartas, posicoes);
+            if (combos.length === 0) return;
+
+            const sec = document.createElement('div');
+            sec.className = 'combinacoes-section';
+            sec.innerHTML = `
+                <h4>Combinações Dessa Leitura</h4>
+                <div class="comb-subtitle">Quando cartas saem juntas, elas conversam entre si. Veja o que essa combinação quer te dizer:</div>
+                <div class="comb-grid"></div>
+            `;
+            const grid = sec.querySelector('.comb-grid');
+            
+            combos.forEach(c => {
+                if (c.tipo === 'narrativa') {
+                    const div = document.createElement('div');
+                    div.className = 'comb-narrativa';
+                    div.innerHTML = `<strong>${c.titulo}</strong><br>${c.texto}`;
+                    grid.appendChild(div);
+                } else {
+                    const div = document.createElement('div');
+                    div.className = 'comb-card' + (c.tipo==='especial' ? ' especial' : '');
+                    div.innerHTML = `
+                        <div class="comb-header">
+                            <div class="comb-pair"><span>${c.par.split(' + ')[0]}</span> <span class="plus">+</span> <span>${c.par.split(' + ')[1] || c.par}</span></div>
+                            ${c.tag ? `<span class="comb-tag ${c.tag==='RARO' ? 'raro' : 'energia'}">${c.tag}</span>` : ''}
+                            ${c.pos ? `<span style="font-size:0.7rem;color:var(--text-muted);">${c.pos}</span>` : ''}
+                        </div>
+                        <div class="comb-title">${c.titulo}</div>
+                        <div class="comb-text">${c.texto}</div>
+                    `;
+                    grid.appendChild(div);
+                }
+            });
+
+            containerEl.appendChild(sec);
+        }
+
+        // ===== Baralho =====
+        function buildDeck() {
+            const deck = [];
+            MAJOR_NAMES.forEach((name, i) => {
+                const num = String(i).padStart(2, '0');
+                const key = `major_${num}`;
+                deck.push({
+                    name, file: `${key}.jpg`, key,
+                    suit: 'Arcano Maior',
+                    meaning: CARD_MEANINGS[key],
+                    meaningReversed: CARD_MEANINGS_REVERSED[key]
+                });
+            });
+            ['Pents', 'Cups', 'Swords', 'Wands'].forEach(suit => {
+                MINOR_NAMES[suit].forEach((name, i) => {
+                    const num = String(i + 1).padStart(2, '0');
+                    const key = `${suit}_${num}`;
+                    deck.push({
+                        name: `${name} de ${SUIT_PT[suit]}`,
+                        file: `${key}.jpg`,
+                        key,
+                        suit: SUIT_PT[suit],
+                        meaning: CARD_MEANINGS[key],
+                        meaningReversed: CARD_MEANINGS_REVERSED[key]
+                    });
+                });
+            });
+            return deck;
+        }
+
+        const DECK = buildDeck();
+
+        // ===== Modal =====
+        const modal = document.getElementById('card-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalImg = document.getElementById('modal-img');
+        const modalSuit = document.getElementById('modal-suit');
+        const modalMeaning = document.getElementById('modal-meaning');
+        const modalClose = document.getElementById('modal-close');
+        const orientationTabs = document.querySelectorAll('.orientation-tab');
+
+        let currentModalCard = null;
+        let currentOrientation = 'normal';
+
+        function renderModal() {
+            if (!currentModalCard) return;
+            const isReversed = currentOrientation === 'reversed';
+            modalImg.src = BASE_URL + currentModalCard.file;
+            modalImg.alt = currentModalCard.name;
+            modalImg.classList.toggle('reversed-img', isReversed);
+
+            const orientationLabel = isReversed
+                ? '<span class="card-orientation reversed">↻ Invertida</span>'
+                : '<span class="card-orientation normal">▲ Normal</span>';
+            modalSuit.innerHTML = currentModalCard.suit + ' ' + orientationLabel;
+
+            const baseText = isReversed ? currentModalCard.meaningReversed : currentModalCard.meaning;
+            const ca = getConselhoAcao(currentModalCard, isReversed);
+            modalMeaning.innerHTML = `
+                <div>${baseText}</div>
+                <div class="modal-acao">
+                    <div class="conselho-box">
+                        <div class="ca-label">Conselho do Dia</div>
+                        <div class="ca-text">${ca.conselho}</div>
+                    </div>
+                    <div class="acao-box">
+                        <div class="ca-label">Ação Prática</div>
+                        <div class="ca-text">${ca.acao}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openModal(cardData) {
+            currentModalCard = cardData;
+            currentOrientation = 'normal';
+            modalTitle.textContent = cardData.name;
+            orientationTabs.forEach(t =>
+                t.classList.toggle('active', t.dataset.orientation === 'normal')
+            );
+            renderModal();
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        orientationTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                currentOrientation = tab.dataset.orientation;
+                orientationTabs.forEach(t =>
+                    t.classList.toggle('active', t === tab)
+                );
+                renderModal();
+            });
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // ===== Cria elemento de carta =====
+        function createCardElement(cardData, reversed = false) {
+            const card = document.createElement('div');
+            card.className = 'card' + (reversed ? ' reversed' : '');
+            card.title = 'Clique para ver o significado';
+
+            if (reversed) {
+                const badge = document.createElement('span');
+                badge.className = 'reversed-badge';
+                badge.textContent = '↻ Invertida';
+                card.appendChild(badge);
+            }
+
+            const img = document.createElement('img');
+            img.src = BASE_URL + cardData.file;
+            img.alt = cardData.name + (reversed ? ' (invertida)' : '');
+            img.loading = 'lazy';
+
+            const title = document.createElement('div');
+            title.className = 'card-title';
+            title.textContent = cardData.name;
+
+            card.appendChild(img);
+            card.appendChild(title);
+            card.addEventListener('click', () => openModal(cardData));
+            return card;
+        }
+
+        // ===== Sorteio =====
+        function drawUniqueCards(n) {
+            const pool = [...DECK];
+            const drawn = [];
+            for (let i = 0; i < n && pool.length > 0; i++) {
+                const idx = Math.floor(Math.random() * pool.length);
+                drawn.push(pool.splice(idx, 1)[0]);
+            }
+            return drawn;
+        }
+
+        // ===== Caixa de Pergunta =====
+        let currentQuestion = '';
+        let currentTheme = '';
+        
+        function detectTheme(question) {
+            const q = question.toLowerCase();
+            if (q.includes('amor') || q.includes('ele') || q.includes('ela') || q.includes('relacionamento') || q.includes('sent') || q.includes('crush') || q.includes('ex')) return 'amor';
+            if (q.includes('trabalho') || q.includes('emprego') || q.includes('carreira') || q.includes('profissional')) return 'trabalho';
+            if (q.includes('dinheiro') || q.includes('financeiro') || q.includes('grana') || q.includes('prosper')) return 'dinheiro';
+            if (q.includes('devo') || q.includes('escolha') || q.includes('decisão') || q.includes('decisao')) return 'decisao';
+            if (q.includes('energia') || q.includes('semana') || q.includes('espiritual')) return 'energia';
+            return '';
+        }
+
+        function getContextualIntro(card, theme, position) {
+            const pos = position ? ` na posição de <strong>${position}</strong>` : '';
+            const themes = {
+                amor: `No amor${pos},`,
+                trabalho: `No trabalho${pos},`,
+                dinheiro: `No financeiro${pos},`,
+                decisao: `Sobre sua decisão${pos},`,
+                energia: `Na sua energia${pos},`
+            };
+            return themes[theme] || (position ? `Em <strong>${position}</strong>,` : '');
+        }
+
+        function setupQuestionBox() {
+            const input = document.getElementById('question-input');
+            const clearBtn = document.getElementById('clear-question');
+            const display = document.getElementById('question-display');
+            const chips = document.querySelectorAll('.chip');
+
+            function updateQuestion() {
+                currentQuestion = input.value.trim();
+                currentTheme = detectTheme(currentQuestion);
+                
+                if (currentQuestion) {
+                    clearBtn.classList.add('visible');
+                    display.style.display = 'block';
+                    display.innerHTML = `Sua pergunta: "<strong>${currentQuestion}</strong>" ${currentTheme ? `<span class="context-tag">${currentTheme}</span>` : ''}`;
+                    localStorage.setItem('tarot_last_question', currentQuestion);
+                } else {
+                    clearBtn.classList.remove('visible');
+                    display.style.display = 'none';
+                    currentTheme = '';
+                }
+
+                // atualiza active dos chips
+                chips.forEach(c => {
+                    const ex = c.dataset.example.toLowerCase();
+                    if (currentQuestion.toLowerCase().includes(ex.split(' ')[0]) || (currentTheme && c.textContent.toLowerCase().includes(currentTheme))) {
+                        c.classList.add('active');
+                    } else {
+                        c.classList.remove('active');
+                    }
+                });
+            }
+
+            input.addEventListener('input', updateQuestion);
+            
+            clearBtn.addEventListener('click', () => {
+                input.value = '';
+                updateQuestion();
+                input.focus();
+            });
+
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    input.value = chip.dataset.example;
+                    updateQuestion();
+                    input.focus();
+                    // vibra no mobile
+                    if (navigator.vibrate) navigator.vibrate(40);
+                });
+            });
+
+            // restaura última pergunta
+            const last = localStorage.getItem('tarot_last_question');
+            if (last) {
+                input.value = last;
+                updateQuestion();
+            }
+        }
+
+        // ===== Executa tiragem =====
+        function runSpread(spreadKey) {
+            const layout = document.getElementById(`layout-${spreadKey}`);
+            const slots = layout.querySelectorAll('.spread-slot');
+            const allowReversed = document.querySelector(
+                `.reversed-check[data-spread="${spreadKey}"]`
+            ).checked;
+
+            const drawn = drawUniqueCards(slots.length);
+
+            // se não tem pergunta, dá um toque gentil mas não bloqueia
+            const questionInput = document.getElementById('question-input');
+            if (!currentQuestion) {
+                questionInput.style.borderColor = '#c19a52';
+                questionInput.placeholder = 'Digite sua pergunta primeiro - sua leitura será mais poderosa!';
+                questionInput.focus();
+                setTimeout(() => questionInput.style.borderColor = '', 2000);
+            }
+
+            // mostra resumo da pergunta acima das cartas
+            const panel = document.getElementById(`panel-${spreadKey}`);
+            let summary = panel.querySelector('.reading-summary');
+            if (!summary) {
+                summary = document.createElement('div');
+                summary.className = 'reading-summary';
+                panel.insertBefore(summary, panel.querySelector('.spread-layout'));
+            }
+
+            slots.forEach((slot, i) => {
+                const oldCard = slot.querySelector('.card');
+                const oldMeaning = slot.querySelector('.card-meaning');
+                const oldPlaceholder = slot.querySelector('.slot-placeholder');
+                if (oldCard) oldCard.remove();
+                if (oldMeaning) oldMeaning.remove();
+                if (oldPlaceholder) oldPlaceholder.style.display = 'none';
+
+                const cardData = drawn[i];
+                const reversed = allowReversed && Math.random() < 0.5;
+                const position = slot.dataset.position || '';
+
+                slot.appendChild(createCardElement(cardData, reversed));
+
+                const meaningEl = document.createElement('div');
+                meaningEl.className = 'card-meaning' + (reversed ? ' reversed-meaning' : '');
+                
+                const label = document.createElement('span');
+                label.className = 'meaning-label' + (reversed ? '' : ' normal-label');
+                label.textContent = reversed ? '↻ Invertida' : '▲ Normal';
+                meaningEl.appendChild(label);
+
+                // adiciona contexto da pergunta
+                if (currentQuestion) {
+                    const ctx = document.createElement('div');
+                    ctx.className = 'interpretation-context';
+                    ctx.innerHTML = getContextualIntro(cardData, currentTheme, position);
+                    meaningEl.appendChild(ctx);
+                }
+
+                meaningEl.appendChild(document.createTextNode(
+                    reversed ? cardData.meaningReversed : cardData.meaning
+                ));
+                
+                // NOVO: Conselho + Ação em cada tiragem
+                const ca = getConselhoAcao(cardData, reversed);
+                const caWrap = document.createElement('div');
+                caWrap.className = 'conselho-acao-wrap';
+                caWrap.innerHTML = `
+                    <div class="conselho-box">
+                        <div class="ca-label">Conselho</div>
+                        <div class="ca-text">${ca.conselho}</div>
+                    </div>
+                    <div class="acao-box">
+                        <div class="ca-label">Ação Prática</div>
+                        <div class="ca-text">${ca.acao}</div>
+                    </div>
+                `;
+                meaningEl.appendChild(caWrap);
+                
+                slot.appendChild(meaningEl);
+            });
+
+            // atualiza resumo geral
+            if (summary) {
+                const temaTxt = currentTheme ? ` sobre <strong>${currentTheme}</strong>` : '';
+                const perguntaTxt = currentQuestion ? `"<em>${currentQuestion}</em>"` : 'sua jornada';
+                summary.innerHTML = `
+                    <h4>Leitura para ${perguntaTxt}${temaTxt}</h4>
+                    <p>Você tirou <strong>${slots.length} carta${slots.length>1?'s':''}</strong> ${currentTheme==='amor'?'para o coração. O tarot está falando de sentimentos e vínculos.':currentTheme==='trabalho'?'para sua carreira. Observe oportunidades e bloqueios.':currentTheme==='dinheiro'?'para sua prosperidade. Energia de materialização.':currentTheme==='decisao'?'para sua escolha. O caminho mais alinhado está se mostrando.':'- reflita como cada posição conversa com sua pergunta.'} Anote o que ressoou, o tarot fala com quem escuta.</p>
+                `;
+                summary.classList.add('visible');
+                // salva no histórico
+                try {
+                    const hist = JSON.parse(localStorage.getItem('tarot_history')||'[]');
+                    hist.unshift({q: currentQuestion || '(sem pergunta)', theme: currentTheme, spread: spreadKey, date: new Date().toLocaleString('pt-BR'), cards: drawn.map(c=>c.name)});
+                    localStorage.setItem('tarot_history', JSON.stringify(hist.slice(0,20)));
+                } catch(e){}
+            }
+
+            // NOVO: Renderiza combinações
+            try {
+                const posicoes = Array.from(slots).map(s => s.dataset.position || '');
+                renderizarCombinacoes(panel, drawn, posicoes);
+            } catch(e){ console.log('erro combinacoes', e); }
+
+            // scroll suave até as cartas
+            setTimeout(() => {
+                document.getElementById(`layout-${spreadKey}`).scrollIntoView({behavior:'smooth', block:'start'});
+            }, 150);
+            
+        }
+
+        // ===== Galeria =====
+        function populateGallery() {
+            const majorGrid = document.getElementById('major-grid');
+            DECK.filter(c => c.key.startsWith('major_')).forEach(c => {
+                majorGrid.appendChild(createCardElement(c));
+            });
+            ['Pents', 'Cups', 'Swords', 'Wands'].forEach(suit => {
+                const grid = document.getElementById(`${suit.toLowerCase()}-grid`);
+                DECK.filter(c => c.key.startsWith(suit + '_')).forEach(c => {
+                    grid.appendChild(createCardElement(c));
+                });
+            });
+        }
+
+        // ===== Abas de tiragem =====
+        function setupTabs() {
+            document.querySelectorAll('.spread-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.spread-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.spread-panel').forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById(`panel-${tab.dataset.spread}`).classList.add('active');
+                });
+            });
+        }
+
+        function setupDrawButtons() {
+            document.querySelectorAll('.draw-btn').forEach(btn => {
+                btn.addEventListener('click', () => runSpread(btn.dataset.spread));
+            });
+        }
+
+        // ===== CARTA DO DIA + STREAK =====
+        const DAILY_TAGLINES_MAJOR = {
+            major_00: 'recomeçar com leveza',
+            major_01: 'manifestar o que você deseja',
+            major_02: 'ouvir sua intuição',
+            major_03: 'nutrir o que está crescendo',
+            major_04: 'assumir o controle',
+            major_05: 'buscar sabedoria',
+            major_06: 'seguir seu coração',
+            major_07: 'avançar com determinação',
+            major_08: 'usar sua força com doçura',
+            major_09: 'pausar e refletir',
+            major_10: 'aceitar as mudanças',
+            major_11: 'agir com justiça',
+            major_12: 'ver por outro ângulo',
+            major_13: 'deixar morrer o que não serve',
+            major_14: 'encontrar equilíbrio',
+            major_15: 'se libertar de um apego',
+            major_16: 'reconstruir com verdade',
+            major_17: 'ter esperança novamente',
+            major_18: 'encarar o que está oculto',
+            major_19: 'celebrar sua luz',
+            major_20: 'atender ao seu chamado',
+            major_21: 'comemorar uma conquista'
+        };
+        const NUMBER_ENERGY = {
+            'Ás': 'começar', '2': 'equilibrar', '3': 'colaborar', '4': 'organizar',
+            '5': 'superar um desafio', '6': 'harmonizar', '7': 'persistir',
+            '8': 'agir rápido', '9': 'quase concluir', '10': 'celebrar um ciclo',
+            'Valete': 'aprender algo novo', 'Cavaleiro': 'avançar com coragem',
+            'Rainha': 'acolher com carinho', 'Rei': 'liderar com firmeza'
+        };
+        const SUIT_ENERGY = {
+            'Ouros': 'no material', 'Copas': 'no coração', 'Espadas': 'na mente', 'Paus': 'na ação'
+        };
+
+        function getDailyTagline(card) {
+            if (card.key.startsWith('major_')) {
+                const verb = DAILY_TAGLINES_MAJOR[card.key] || 'refletir';
+                return `Hoje é dia de <span>${verb}</span> — ${card.name}`;
+            } else {
+                const num = card.name.split(' ')[0];
+                const suit = card.name.split(' de ')[1] || '';
+                const verb = NUMBER_ENERGY[num] || 'seguir';
+                const where = SUIT_ENERGY[suit] || '';
+                return `Hoje é dia de <span>${verb} ${where}</span> — ${card.name}`;
+            }
+        }
+
+        function getTodayString() {
+            const now = new Date();
+            return now.toISOString().split('T')[0]; // YYYY-MM-DD
+        }
+
+        function setupDailyCard() {
+            const drawBtn = document.getElementById('daily-draw-btn');
+            const placeholder = document.getElementById('daily-placeholder');
+            const revealed = document.getElementById('daily-revealed');
+            const img = document.getElementById('daily-img');
+            const nameEl = document.getElementById('daily-name');
+            const taglineEl = document.getElementById('daily-tagline');
+            const meaningEl = document.getElementById('daily-meaning');
+            const dateEl = document.getElementById('daily-date');
+            const streakCount = document.getElementById('streak-count');
+            const bestStreak = document.getElementById('best-streak');
+            const totalDraws = document.getElementById('total-draws');
+            const notifyBtn = document.getElementById('daily-notify-btn');
+            const stage = document.getElementById('daily-stage');
+
+            function loadStats() {
+                streakCount.textContent = localStorage.getItem('tarot_streak') || '0';
+                bestStreak.textContent = localStorage.getItem('tarot_best_streak') || '0';
+                totalDraws.textContent = localStorage.getItem('tarot_total_draws') || '0';
+            }
+
+            function showDailyCard(cardData, isReversed, dateStr) {
+                placeholder.style.display = 'none';
+                revealed.style.display = 'flex';
+                img.src = BASE_URL + cardData.file;
+                img.alt = cardData.name;
+                img.className = isReversed ? 'reversed' : '';
+                nameEl.innerHTML = cardData.name + (isReversed ? ' <span style="color:var(--reversed);font-size:0.8em;">↻ Invertida</span>' : '');
+                taglineEl.innerHTML = getDailyTagline(cardData);
+                const baseMeaning = isReversed ? cardData.meaningReversed : cardData.meaning;
+                const short = baseMeaning.split('. ')[0] + '.';
+                meaningEl.textContent = short + (isReversed ? ' Energia pedindo atenção para o oposto.' : ' Leve isso com você hoje.');
+                
+                // NOVO: Conselho + Ação Prática
+                const ca = getConselhoAcao(cardData, isReversed);
+                const wrap = document.getElementById('daily-conselho-acao');
+                const consEl = document.getElementById('daily-conselho');
+                const acaoEl = document.getElementById('daily-acao');
+                if (wrap && consEl && acaoEl) {
+                    consEl.textContent = ca.conselho;
+                    acaoEl.textContent = ca.acao;
+                    wrap.style.display = 'flex';
+                    // check se já fez hoje
+                    const hoje = new Date().toISOString().split('T')[0];
+                    if (localStorage.getItem('tarot_acao_feita_' + hoje) === 'true') {
+                        setTimeout(()=> {
+                            const btns = document.querySelectorAll('#daily-conselho-acao .ca-btn');
+                            btns.forEach(b=> { if(b.textContent.includes('Fiz') || b.textContent.includes('Feito')) { b.textContent='Feito hoje!'; b.style.background='var(--gold)'; b.style.color='#1d1322'; }});
+                        }, 100);
+                    }
+                }
+
+                dateEl.textContent = new Date(dateStr + 'T12:00:00').toLocaleDateString('pt-BR', {weekday:'long', day:'numeric', month:'long'});
+                drawBtn.textContent = 'Carta de hoje revelada - volte amanhã';
+                drawBtn.disabled = true;
+                if (navigator.vibrate) navigator.vibrate([50,30,50]);
+            }
+
+            function checkExistingToday() {
+                const savedDate = localStorage.getItem('tarot_daily_date');
+                const today = getTodayString();
+                if (savedDate === today) {
+                    const cardKey = localStorage.getItem('tarot_daily_card_key');
+                    const isRev = localStorage.getItem('tarot_daily_reversed') === 'true';
+                    const cardData = DECK.find(c => c.key === cardKey);
+                    if (cardData) {
+                        showDailyCard(cardData, isRev, today);
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function drawDailyCard() {
+                const today = getTodayString();
+                if (localStorage.getItem('tarot_daily_date') === today) return; // já tirou
+
+                // sorteia
+                const cardData = DECK[Math.floor(Math.random() * DECK.length)];
+                const isReversed = Math.random() < 0.33; // 33% invertida
+
+                // salva
+                localStorage.setItem('tarot_daily_date', today);
+                localStorage.setItem('tarot_daily_card_key', cardData.key);
+                localStorage.setItem('tarot_daily_reversed', isReversed);
+
+                // streak logic
+                const lastDate = localStorage.getItem('tarot_last_streak_date');
+                let streak = parseInt(localStorage.getItem('tarot_streak') || '0');
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+                if (!lastDate) {
+                    streak = 1;
+                } else if (lastDate === yesterdayStr || lastDate === today) {
+                    // se ontem ou já contou hoje, incrementa só se não for hoje repetido
+                    if (lastDate !== today) streak += 1;
+                } else if (lastDate !== today) {
+                    const diff = (new Date(today) - new Date(lastDate)) / (1000*60*60*24);
+                    if (diff > 1.5) streak = 1; // quebrou sequência
+                    else streak += 1;
+                }
+
+                localStorage.setItem('tarot_streak', streak);
+                localStorage.setItem('tarot_last_streak_date', today);
+                const best = parseInt(localStorage.getItem('tarot_best_streak') || '0');
+                if (streak > best) localStorage.setItem('tarot_best_streak', streak);
+                
+                const total = parseInt(localStorage.getItem('tarot_total_draws') || '0') + 1;
+                localStorage.setItem('tarot_total_draws', total);
+
+                // mostra
+                showDailyCard(cardData, isReversed, today);
+                loadStats();
+
+                // animação confete simples
+                stage.animate([
+                    {opacity: 0.4},
+                    {opacity: 1}
+                ], {duration: 500, easing: 'ease-out'});
+            }
+
+            function setupNotify() {
+                const enabled = localStorage.getItem('tarot_notify_enabled') === 'true';
+                if (enabled) {
+                    notifyBtn.textContent = 'Lembrete ativo às 8h';
+                    notifyBtn.classList.add('notify-enabled');
+                }
+
+                notifyBtn.addEventListener('click', async () => {
+                    if (!('Notification' in window)) {
+                        alert('Seu navegador não suporta notificações, mas vamos te lembrar quando você abrir o site todo dia às 8h!');
+                        localStorage.setItem('tarot_notify_enabled', 'true');
+                        notifyBtn.textContent = 'Lembrete ativo às 8h';
+                        notifyBtn.classList.add('notify-enabled');
+                        return;
+                    }
+                    let perm = Notification.permission;
+                    if (perm !== 'granted') {
+                        perm = await Notification.requestPermission();
+                    }
+                    if (perm === 'granted') {
+                        localStorage.setItem('tarot_notify_enabled', 'true');
+                        notifyBtn.textContent = 'Lembrete ativo às 8h';
+                        notifyBtn.classList.add('notify-enabled');
+                        new Notification('Tarot - Lembrete ativado!', {
+                            body: 'Amanhã às 8h vou te avisar para tirar sua carta do dia.',
+                            icon: 'https://raw.githubusercontent.com/OrionJDev/the-arcana/main/cards/major_17.png'
+                        });
+                    } else {
+                        alert('Ative o lembrete nos favoritos: todo dia às 8h volte aqui para sua carta.');
+                        localStorage.setItem('tarot_notify_enabled', 'true');
+                        notifyBtn.textContent = 'Lembrete ativo';
+                        notifyBtn.classList.add('notify-enabled');
+                    }
+                });
+
+                // checa se passou das 8h e não tirou hoje -> notifica se a página estiver aberta
+                const now = new Date();
+                if (now.getHours() >= 8 && localStorage.getItem('tarot_daily_date') !== getTodayString() && localStorage.getItem('tarot_notify_enabled') === 'true' && Notification.permission === 'granted' && document.visibilityState === 'visible') {
+                    setTimeout(() => {
+                        new Notification('Sua carta do dia está esperando!', {
+                            body: 'Hoje tem uma mensagem especial para você no tarot.',
+                            icon: 'https://raw.githubusercontent.com/OrionJDev/the-arcana/main/cards/major_17.png'
+                        });
+                    }, 1500);
+                }
+            }
+
+            loadStats();
+            const hadToday = checkExistingToday();
+            if (!hadToday) {
+                placeholder.addEventListener('click', drawDailyCard);
+                drawBtn.addEventListener('click', drawDailyCard);
+            } else {
+                drawBtn.disabled = true;
+                drawBtn.textContent = 'Carta de hoje revelada - volte amanhã';
+            }
+            setupNotify();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateGallery();
+            setupTabs();
+            setupDrawButtons();
+            setupQuestionBox();
+            setupDailyCard();
+        });
+    </script>
+
+    <script>
+    /* Plano B: se a fonte gótica da internet não carregar, os títulos viram letras góticas Unicode */
+    (function () {
+        function fraktur(str) {
+            return str.normalize('NFD').replace(/[A-Za-z]/g, function (ch) {
+                var c = ch.charCodeAt(0);
+                return String.fromCodePoint(c < 97 ? 0x1D56C + (c - 65) : 0x1D586 + (c - 97));
+            }).normalize('NFC');
+        }
+        function apply() {
+            document.querySelectorAll('h1, h2, h3').forEach(function (el) {
+                var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+                var n;
+                while ((n = walker.nextNode())) {
+                    if (n.nodeValue.trim()) n.nodeValue = fraktur(n.nodeValue);
+                }
+            });
+        }
+        var timeout = new Promise(function (r) { setTimeout(function () { r([]); }, 3000); });
+        var load = (document.fonts && document.fonts.load)
+            ? document.fonts.load('1rem UnifrakturMaguntia', 'Aa').catch(function () { return []; })
+            : Promise.resolve([]);
+        Promise.race([load, timeout]).then(function (faces) {
+            if (!faces || !faces.length) apply();
+        });
+    })();
+    </script>
+</body>
+</html>
