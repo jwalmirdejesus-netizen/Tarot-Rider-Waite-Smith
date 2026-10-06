@@ -47,3 +47,5 @@ As imagens são de domínio público e vêm do projeto
 ![Tarot-Rider-Waite-Smith](Screenshot_20261006-200931.jpg)
 
 ![Tarot-Rider-Waite-Smith](Screenshot_20261006-200938.jpg)
+
+![Tarot-Rider-Waite-Smith](Screenshot_20261006-200945.jpg)
