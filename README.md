@@ -33,3 +33,5 @@ As imagens são de domínio público e vêm do projeto
 
 
 # Screenshots
+
+![virtual-pet-html](Screenshot_20260909-141258.jpg)
