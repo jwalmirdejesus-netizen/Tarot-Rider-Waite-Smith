@@ -27,7 +27,9 @@ O tarot aqui é pra reflexão e entretenimento. Use as cartas como ponto de part
 ## Créditos
 
 As imagens são de domínio público e vêm do projeto 
-[The Arcana](https://github.com/OrionJDev/the-arcana). Rider-Waite-Smith © 1909, ilustrado por Pamela Colman Smith.
+[The Arcana](https://github.com/OrionJDev/the-arcana).
+
+ Rider-Waite-Smith © 1909, ilustrado por Pamela Colman Smith.
 
 
 #sc
